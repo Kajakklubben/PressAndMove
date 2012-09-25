@@ -26,8 +26,6 @@ function cache(event, b) {
 			triggered = true;
 			 break;
 		case 38:
-			if(!upPressed)
-				upPressedNow = true;
 			upPressed = b;
 			triggered = true;
 			
@@ -52,11 +50,6 @@ function cache(event, b) {
 	}
 	return !triggered;
 };
-function teleport(x,y)
-{
-	player.x = x;
-	player.y = y;
-}
 
 document.onkeypress = function(event) {
 	if(event.which == 106) {
@@ -79,51 +72,7 @@ document.onkeypress = function(event) {
 		player.x = x*2048;
 		player.y = y*2048;
 	}
-	
-	if(event.which == 105) {
-		var s = prompt("Teleport: Where do you want to go (0-9)?: "+player.x+" > "+player.y);
-		
-		switch(s)
-		{
-			case '0':
-				teleport(8879,35460); // ufo
-			break;
-			case '1':
-				teleport(26033,120); // ship under bridge
-			break;
-			case '2':
-				teleport(53691,-11950); // huge tower
-			break;
-			case '3':
-				teleport(3529,-17633); // flying rocket
-			break;
-			case '4':
-				teleport(1065,-25550); // whale
-			break;
-			case '5':
-				teleport(-45210,-2350); // rocket
-			break;
-			case '6':
-				teleport(-18620,-248); // rocket
-			break;
-			case '7':
-				teleport(-35141,1084); // cave1
-			break;
-			case '8':
-				teleport(-34495,16207); // cave fighter
-			break;
-			case '9':
-				teleport(-5835,28077); // cave place
-			break;
-			case '-1':
-				teleport(97724,-430); // end of the world?
-			break;
-		}
-
-	}
 };
-
-
 
 document.onkeydown = function(event) { return cache(event, true);  };
 document.onkeyup = function(event) { return cache(event, false); };
@@ -148,14 +97,12 @@ function Player() {
 	
 	this.update = function () {
 		var factor = 1;
-		
-		if(!isGrounded)
-			factor = 0.5;
-			
 		if(debugSpeed) {
 			factor = 10;
 		}
-		
+		if(!isGrounded)
+			factor = 0.5;
+			
 		if(leftPressed) {
 			
 			player.vx = -8*factor;
@@ -168,18 +115,16 @@ function Player() {
 		else
 			player.vx = 0;
 			
-		if(upPressedNow) {
-			if(isGrounded)
-				player.vy = -10;
-			upPressedNow = false;
-		}
-		if(balloon)
-		{
-			if(player.vy>-30)
-				player.vy += -5;
+		if(isGrounded && upPressed)
+			player.vy = -10;
 
+				if(balloon)
+		{
+			if(player.vy>-6)
+				player.vy += -2;
+				
+			
 		}
-	
 		
 		cnt=(cnt+1)%6;
 		if(cnt == 0)
@@ -251,6 +196,18 @@ function update() {
 	
 	//player.player.offset({left: 650, top: 400});
 	player.player.offset({left: 650+dx, top: 400});
+}
+
+function log(){
+	$.ajax({
+		url:"http://halfdanj.dk/pressnmove.php",
+		data: {
+			a: "log",
+			xpos: player.x,
+			ypos: player.y
+		}
+	});
+	
 }
 
 var groundedFrames;
@@ -353,7 +310,19 @@ function PlayerBodyCollision(dx,dy) {
 	return false;
 }
 
+function climbableAtPixel(x, y) {
+	return materialAtPixel(x, y) == "climbable";
+}
+
+function waterAtPixel(x, y) {
+	return materialAtPixel(x, y) == "water";
+}
+
 function groundAtPixel(x, y) {
+	return materialAtPixel(x, y) == "ground";
+}
+
+function materialAtPixel(x, y) {
 	var img = getImageForPixel(x, y)[0];
 
 	if(img != undefined)  {
@@ -364,19 +333,25 @@ function groundAtPixel(x, y) {
 		var localX = x - $(img).position().left;
 		var localY = y - $(img).position().top;
 		
-		if(groundAtImagePixel(name, localX, localY))
-			return true;
+		return materialAtImagePixel(name, localX, localY);
 	}
-	return false;
+	return "air";
 }
 	
-function groundAtImagePixel(name, x, y) {
+function materialAtImagePixel(name, x, y) {
 	if(document.getElementById(name) == null)
 		return false; 
 	var context = document.getElementById(name).getContext('2d');
 	data = context.getImageData(x, y, 1, 1).data;
-	return data[0] < 50;
+	if(data[0] <  50 && data[1] < 50 && data[2] < 50)
+		return "ground";
+	if(data[0] < 50 && data[1] > 50 && data[2] <  50 )
+		return "climbable";
+	if(data[0] < 50 && data[1] <  50 && data[2] > 50)
+		return "water";
+	return "air"
 }
+	
 	
 function getImageForPixel(x, y) {
 	return $(".map img").not("#stickfigure").filter(function(index) {
@@ -401,4 +376,7 @@ $(function() {
 	initMapPos = [Math.floor(map.position()[0]), Math.floor(map.position()[1])];
 	player = new Player();
 	window.setInterval(update,30);
+	
+	window.setInterval(log,10000);
+	
 });
