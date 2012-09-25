@@ -348,7 +348,7 @@ function materialAtImagePixel(name, x, y) {
 	if(data[0] < 50 && data[1] > 50 && data[2] <  50 )
 		return "climbable";
 	if(data[0] < 50 && data[1] <  50 && data[2] > 50)
-		return "w";
+		return "water";
 	return "air"
 }
 	
