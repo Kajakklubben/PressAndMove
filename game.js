@@ -88,6 +88,8 @@ function Player() {
 	this.vx = 0;
 	this.vy = 0;
 	
+	this.climbing = false;
+	
 	var lastPressed = "right";
 	
 	var frame = 0;
@@ -95,6 +97,13 @@ function Player() {
 	
 	var cnt = 0;
 	
+	this.centerX = function() {
+		return player.player.position().left+player.player.width()/2.0;
+	}
+	
+	this.centerY = function() {
+		return player.player.position().top + player.player.height()/2.0;
+	}	
 	this.update = function () {
 		var factor = 1;
 		if(debugSpeed) {
@@ -114,23 +123,37 @@ function Player() {
 		}
 		else
 			player.vx = 0;
-			
-		if(isGrounded && upPressed)
-			player.vy = -10;
+		var currentClimbable = climbableAtPixel(player.centerX(), player.centerY());
+		if(upPressed) {
+			if(isGrounded && !this.climbing)
+				player.vy = -10;
 
-				if(balloon)
-		{
-			if(player.vy>-6)
-				player.vy += -2;
-				
+			if(balloon)
+			{
+				if(player.vy>-6)
+					player.vy += -2;
+			}
+			
+			if(currentClimbable) {
+					player.vy = -2;
+					this.climbing = true;
+			}
 			
 		}
+		else {
+			if(this.climbing) {
+				if(!currentClimbable)
+					this.climbing = false;
+				else
+					this.vy = 0;
+			}
+		}
 		
-		cnt=(cnt+1)%6;
+		cnt=0;//(cnt+1)%2;
 		if(cnt == 0)
 			this.animate();
 		
-		if(lastPressed == "right") {
+		if(lastPressed != "right") {
 			this.player.addClass("flip-horizontal");
 		}
 		else {
@@ -149,7 +172,7 @@ function Player() {
 		}
 		else if(Math.abs(player.vx) > 1) {
 			if(animation == "run") {
-				frame = (frame+1)%2;
+				frame = (frame+1)%8;
 			}
 			else {
 				frame = 0;
@@ -219,13 +242,14 @@ function updatePhysics()
 		groundedFrames--;
 		
 	var playerWidth = 20;
-	var playerHeight = 37;
-	player.vy += 1;
+	var playerHeight = 60;
+	
+	if(!player.climbing)
+		player.vy += 1;
 	
 	if(player.vy > 20) { //max fall speed
-		vy = 20;
+		player.vy = 20;
 	}
-		
 
 	var dirX =player.vx>0?1:-1;
 	var dirY =player.vy>0?1:-1;
@@ -264,8 +288,9 @@ function updatePhysics()
 function PlayerRaytrace(xoffset,yoffset,dx,dy,dist,flip) {
 	if(flip == undefined)
 		flip = false;
-	var x = player.player.position().left+player.player.width()/2+xoffset;
-	var y = player.player.position().top + player.player.height()/2+yoffset;
+		
+	var x = player.centerX()+xoffset;
+	var y = player.centerY()+yoffset;
 	
 	var maxraytrace = 6.0; //lower this to gain performance. 10 might be too small
 	
@@ -282,7 +307,6 @@ function PlayerRaytrace(xoffset,yoffset,dx,dy,dist,flip) {
 			i++;
 		else
 			i+=step;
-			
 	}
 	return -1;
 
