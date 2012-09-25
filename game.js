@@ -314,7 +314,19 @@ function PlayerBodyCollision(dx,dy) {
 	return false;
 }
 
+function climbableAtPixel(x, y) {
+	return materialAtPixel(x, y) == "climbable";
+}
+
+function waterAtPixel(x, y) {
+	return materialAtPixel(x, y) == "water";
+}
+
 function groundAtPixel(x, y) {
+	return materialAtPixel(x, y) == "ground";
+}
+
+function materialAtPixel(x, y) {
 	var img = getImageForPixel(x, y)[0];
 
 	if(img != undefined)  {
@@ -325,19 +337,25 @@ function groundAtPixel(x, y) {
 		var localX = x - $(img).position().left;
 		var localY = y - $(img).position().top;
 		
-		if(groundAtImagePixel(name, localX, localY))
-			return true;
+		return materialAtImagePixel(name, localX, localY);
 	}
-	return false;
+	return "air";
 }
 	
-function groundAtImagePixel(name, x, y) {
+function materialAtImagePixel(name, x, y) {
 	if(document.getElementById(name) == null)
 		return false; 
 	var context = document.getElementById(name).getContext('2d');
 	data = context.getImageData(x, y, 1, 1).data;
-	return data[0] < 50;
+	if(data[0] <  50)
+		return "ground";
+	if(data[1] > 50)
+		return "climbable";
+	if(data[2] > 50)
+		return "water";
+	return "air"
 }
+	
 	
 function getImageForPixel(x, y) {
 	return $(".map img").not("#stickfigure").filter(function(index) {
