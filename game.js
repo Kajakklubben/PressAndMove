@@ -218,8 +218,13 @@ function Player() {
 	this.animate = function() {
 	
 		if(player.vy > 8) {
-			animation = "fall"
-			frame = 0;
+			if(animation == "fall") {
+				frame = (frame+1);
+				frame = frame > 1 ? 1 : frame;
+			}
+			else
+				frame = 0;
+			animation = "fall";
 		}
 		else if(player.vy < 0) {
 			if(balloon) {
@@ -229,7 +234,7 @@ function Player() {
 			else {
 				if(animation == "jump") {
 					frame = (frame+1);
-					frame = frame > 4 ? 4 : frame;
+					frame = frame > 1 ? 1 : frame;
 				}
 				else {
 					frame = 0;
@@ -237,7 +242,7 @@ function Player() {
 				animation = "jump"
 			}
 		}
-		else if(Math.abs(player.vx) > 1) {
+		else if(Math.abs(player.vx) > 1 && animation != "air") {
 			if(animation == "run") {
 				frame = (frame+1)%8;
 			}
@@ -247,7 +252,7 @@ function Player() {
 				
 			animation = "run"
 		}
-		else {
+		else if(animation != "air") {
 			if(animation == "idle") {
 				frame = (frame+1)%2;
 			}
@@ -259,10 +264,8 @@ function Player() {
 		}
 		
 		var ani = "player\\man_" + animation +  "_" + pad(1+frame, 2) + ".png";
-		if(animation == "jump")
-			console.log(ani);
 		
-		this.player.attr("src", ani);
+		this.player.attr("src", ani)
 	}
 }
 var camx = 0.0;
