@@ -202,6 +202,18 @@ function update() {
 	player.player.offset({left: 650+dx, top: 400});
 }
 
+function log(){
+	$.ajax({
+		url:"http://halfdanj.dk/pressnmove.php",
+		data: {
+			a: "log",
+			xpos: player.x,
+			ypos: player.y
+		}
+	});
+	
+}
+
 var groundedFrames;
 function updatePhysics()
 {
@@ -350,4 +362,7 @@ $(function() {
 	initMapPos = [Math.floor(map.position()[0]), Math.floor(map.position()[1])];
 	player = new Player();
 	window.setInterval(update,30);
+	
+	window.setInterval(log,10000);
+	
 });
