@@ -343,11 +343,11 @@ function materialAtImagePixel(name, x, y) {
 		return false; 
 	var context = document.getElementById(name).getContext('2d');
 	data = context.getImageData(x, y, 1, 1).data;
-	if(data[0] <  50)
+	if(data[0] <  50 && data[1] < 50 && data[2] < 50)
 		return "ground";
-	if(data[1] > 50)
+	if(data[0] < 50 && data[1] > 50 && data[2] <  50 )
 		return "climbable";
-	if(data[2] > 50)
+	if(data[0] < 50 && data[1] <  50 && data[2] > 50)
 		return "w";
 	return "air"
 }
