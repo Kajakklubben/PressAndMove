@@ -51,6 +51,14 @@ function cache(event, b) {
 	return !triggered;
 };
 
+function teleport(x,y)
+{
+	player.x = x;
+	player.y = y;
+	player.vx = 0;
+	player.vy = 0;
+}
+
 document.onkeypress = function(event) {
 	if(event.which == 106) {
 		var s = prompt("Where do you wanna go?");
@@ -71,6 +79,48 @@ document.onkeypress = function(event) {
 			
 		player.x = x*2048;
 		player.y = y*2048;
+	}
+	
+	if(event.which == 105) {
+		var s = prompt("Teleport: Where do you want to go (0-9)?: "+player.x+" > "+player.y);
+		
+		switch(s)
+		{
+			case '0':
+				teleport(8879,35460); // ufo
+			break;
+			case '1':
+				teleport(26033,120); // ship under bridge
+			break;
+			case '2':
+				teleport(53691,-11750); // huge tower
+			break;
+			case '3':
+				teleport(3529,-17703); // flying rocket
+			break;
+			case '4':
+				teleport(1065,-25550); // whale
+			break;
+			case '5':
+				teleport(-45210,-2350); // rocket
+			break;
+			case '6':
+				teleport(-18620,-298); // rocket
+			break;
+			case '7':
+				teleport(-35141,1084); // cave1
+			break;
+			case '8':
+				teleport(-34495,16207); // cave fighter
+			break;
+			case '9':
+				teleport(-5835,28077); // cave place
+			break;
+			case '-1':
+				teleport(97724,-490); // end of the world?
+			break;
+		}
+
 	}
 };
 
@@ -173,7 +223,8 @@ function Player() {
 		this.player.attr("src", ani);
 	}
 }
-var camx;
+var camx = 0.0;
+var camy = 0.0;
 function update() {
 	player.update();
 	
@@ -181,21 +232,30 @@ function update() {
 	
 	oldPlayerX = player.x;
 	
+	
+	
+	camx += player.vx;
+	camx-=camx/5.0;
+	camy += player.vy;
+	camy-=camy/5.0;
+		
 	player.x += player.vx;
 	player.y += player.vy;
 	
 	var x = initMapPos[0] - player.x;
 	var y = initMapPos[1] - player.y;
 	
-	var dx = 0;
 	
-	map.position()[0] = x+dx;
-	map.position()[1] = y;
+	
+	map.position()[0] = x+camx;
+	map.position()[1] = y+camy;
 	
 	map.update();
+
+		
 	
 	//player.player.offset({left: 650, top: 400});
-	player.player.offset({left: 650+dx, top: 400});
+	player.player.offset({left: 650+camx, top: 400+camy});
 }
 
 function log(){
