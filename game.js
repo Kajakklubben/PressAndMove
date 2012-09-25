@@ -43,6 +43,12 @@ function cache(event, b) {
 			triggered = true;
 			break;
 		case 32:
+			if(!gameStarted) {
+				gameStarted = true;
+				window.setInterval(update,30);
+				window.setInterval(log,10000);
+			}
+		
 			balloon = b;
 			triggered = true;
 			break;
@@ -59,7 +65,11 @@ function teleport(x,y)
 	player.vy = 0;
 }
 
+gameStarted = false;
 document.onkeypress = function(event) {
+	if(event.which == 32) {
+	}
+	
 	if(event.which == 106) {
 		var s = prompt("Where do you wanna go?");
 
@@ -129,24 +139,34 @@ document.onkeyup = function(event) { return cache(event, false); };
 
 function Player() {
 	var $map = $(".map");
-	$map.append('<img src="man.png" style="position: relative; z-index: 20" id="stickfigure">');
+	$map.append('<img src="player/man_air_01.png" style="position: relative; z-index: 20" id="stickfigure">');
 	this.player = $("#stickfigure", $map);
 	
-	this.x = 0;
-	this.y = 0;
+	this.x = -290;
+	this.y = -112;
 	
 	this.vx = 0;
 	this.vy = 0;
 	this.nx = 0;
 	this.ny = 0;
 	
+	this.climbing = false;
+	
 	var lastPressed = "right";
 	
 	var frame = 0;
-	var animation = "fall";
+	var animation = "air";
+	var justJumped = true;
 	
 	var cnt = 0;
 	
+	this.centerX = function() {
+		return player.player.position().left+player.player.width()/2.0;
+	}
+	
+	this.centerY = function() {
+		return player.player.position().top + player.player.height()/2.0;
+	}	
 	this.update = function () {
 		var factor = 1;
 		if(debugSpeed) {
@@ -167,22 +187,47 @@ function Player() {
 		else
 			player.vx = 0;
 			
-		if(isGrounded && upPressed)
-			player.vy = -10;
+		var currentClimbable = climbableAtPixel(player.centerX(), player.centerY());
+		if(upPressed) {
+			if(isGrounded && !this.climbing) {
+				justJumped = true;
+				player.vy = -10;
+			}
 
-				if(balloon)
+			if(currentClimbable) {
+					player.vy = -2;
+					this.climbing = true;
+			}
+			else
+				this.climbing = false;
+			
+		}
+		else {
+			if(this.climbing) {
+				if(!currentClimbable) {
+					this.climbing = false;
+					
+				}
+				else if(downPressed) {
+					player.vy = 2;
+				}
+				else
+					this.vy = 0;
+			}
+		}
+		
+		if(balloon)
 		{
 			if(player.vy>-6)
 				player.vy += -2;
-				
-			
 		}
+
 		
-		cnt=(cnt+1)%6;
+		cnt=(cnt+1)%2;
 		if(cnt == 0)
 			this.animate();
 		
-		if(lastPressed == "right") {
+		if(lastPressed != "right") {
 			this.player.addClass("flip-horizontal");
 		}
 		else {
@@ -191,17 +236,35 @@ function Player() {
 	}
 	
 	this.animate = function() {
-		if(player.vy > 5) {
-			animation = "fall"
-			frame = 0;
+	
+		if(player.vy > 8) {
+			if(animation == "fall") {
+				frame = (frame+1);
+				frame = frame > 1 ? 1 : frame;
+			}
+			else
+				frame = 0;
+			animation = "fall";
 		}
 		else if(player.vy < 0) {
-			frame = 0;
-			animation = "air"
+			if(balloon) {
+				frame = 0;
+				animation = "air"
+			}
+			else {
+				if(animation == "jump") {
+					frame = (frame+1);
+					frame = frame > 1 ? 1 : frame;
+				}
+				else {
+					frame = 0;
+				}
+				animation = "jump"
+			}
 		}
-		else if(Math.abs(player.vx) > 1) {
+		else if(Math.abs(player.vx) > 1 && animation != "air") {
 			if(animation == "run") {
-				frame = (frame+1)%2;
+				frame = (frame+1)%8;
 			}
 			else {
 				frame = 0;
@@ -209,7 +272,7 @@ function Player() {
 				
 			animation = "run"
 		}
-		else {
+		else if(animation != "air") {
 			if(animation == "idle") {
 				frame = (frame+1)%2;
 			}
@@ -222,7 +285,7 @@ function Player() {
 		
 		var ani = "player\\man_" + animation +  "_" + pad(1+frame, 2) + ".png";
 		
-		this.player.attr("src", ani);
+		this.player.attr("src", ani)
 	}
 }
 var camx = 0.0;
@@ -255,8 +318,6 @@ function update() {
 	map.position()[1] = y;
 	
 	map.update();
-
-		
 	
 	//player.player.offset({left: 650, top: 400});
 	player.player.offset({left: 650+(player.x-camx), top: 400+(player.y-camy)});
@@ -283,13 +344,14 @@ function updatePhysics()
 		groundedFrames--;
 		
 	var playerWidth = 20;
-	var playerHeight = 37;
-	player.vy += 1;
+	var playerHeight = 60;
+	
+	if(!player.climbing)
+		player.vy += 1;
 	
 	if(player.vy > 20) { //max fall speed
-		vy = 20;
+		player.vy = 20;
 	}
-		
 
 	var dirX =player.vx>0?1:-1;
 	var dirY =player.vy>0?1:-1;
@@ -328,8 +390,9 @@ function updatePhysics()
 function PlayerRaytrace(xoffset,yoffset,dx,dy,dist,flip) {
 	if(flip == undefined)
 		flip = false;
-	var x = player.player.position().left+player.player.width()/2+xoffset;
-	var y = player.player.position().top + player.player.height()/2+yoffset;
+		
+	var x = player.centerX()+xoffset;
+	var y = player.centerY()+yoffset;
 	
 	var maxraytrace = 6.0; //lower this to gain performance. 10 might be too small
 	
@@ -346,7 +409,6 @@ function PlayerRaytrace(xoffset,yoffset,dx,dy,dist,flip) {
 			i++;
 		else
 			i+=step;
-			
 	}
 	return -1;
 
@@ -439,8 +501,5 @@ $(function() {
 	map=new Map($('#comic'));
 	initMapPos = [Math.floor(map.position()[0]), Math.floor(map.position()[1])];
 	player = new Player();
-	window.setInterval(update,30);
-	
-	window.setInterval(log,10000);
-	
+	update();
 });
