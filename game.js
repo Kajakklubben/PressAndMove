@@ -199,7 +199,7 @@ function Player() {
 			}
 		}
 		
-		cnt=0;//(cnt+1)%2;
+		cnt=(cnt+1)%2;
 		if(cnt == 0)
 			this.animate();
 		
