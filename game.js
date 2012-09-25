@@ -53,8 +53,8 @@ function cache(event, b) {
 
 function teleport(x,y)
 {
-	player.x = x;
-	player.y = y;
+	player.nx = x;
+	player.ny = y;
 	player.vx = 0;
 	player.vy = 0;
 }
@@ -137,6 +137,8 @@ function Player() {
 	
 	this.vx = 0;
 	this.vy = 0;
+	this.nx = 0;
+	this.ny = 0;
 	
 	var lastPressed = "right";
 	
@@ -225,6 +227,7 @@ function Player() {
 }
 var camx = 0.0;
 var camy = 0.0;
+
 function update() {
 	player.update();
 	
@@ -232,30 +235,31 @@ function update() {
 	
 	oldPlayerX = player.x;
 	
+	player.nx += player.vx;
+	player.ny += player.vy;
+	
+
+	camy += (player.y-camy)/3.0;
+	camx += (player.x-camx)/3.0;
 	
 	
-	camx += player.vx;
-	camx-=camx/5.0;
-	camy += player.vy;
-	camy-=camy/5.0;
-		
-	player.x += player.vx;
-	player.y += player.vy;
-	
-	var x = initMapPos[0] - player.x;
-	var y = initMapPos[1] - player.y;
+	player.x = player.nx;
+	player.y = player.ny;
 	
 	
+	var x = initMapPos[0] - camx;
+	var y = initMapPos[1] - camy;
+
 	
-	map.position()[0] = x+camx;
-	map.position()[1] = y+camy;
+	map.position()[0] = x;
+	map.position()[1] = y;
 	
 	map.update();
 
 		
 	
 	//player.player.offset({left: 650, top: 400});
-	player.player.offset({left: 650+camx, top: 400+camy});
+	player.player.offset({left: 650+(player.x-camx), top: 400+(player.y-camy)});
 }
 
 function log(){
@@ -294,7 +298,7 @@ function updatePhysics()
 	if(centerHorDist!=-1)
 	{
 	
-		player.x = player.x+dirX*(centerHorDist+playerWidth/2)-dirX*playerWidth/2;
+		player.nx = player.x+dirX*(centerHorDist+playerWidth/2)-dirX*playerWidth/2;
 		
 		player.vx = 0;
 		stopHorizontal = true;
@@ -311,12 +315,12 @@ function updatePhysics()
 		var dist = PlayerRaytrace(-1,dirY*playerHeight/2+Math.abs(player.vy),0,-dirY,playerHeight,true);
 		if(dist != -1)
 		{
-			player.y = player.y - (dirY*dist)+1 +dirY*centerVerDist;
-			//player.vx *=0.9;
+			
+			player.ny = player.y - (dirY*dist)+1 +dirY*centerVerDist;
 			
 		}
 		else
-		player.y = player.y+dirY*(centerVerDist);
+		player.vy = dirY*(centerVerDist);
 
 	}
 
