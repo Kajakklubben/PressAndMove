@@ -43,6 +43,12 @@ function cache(event, b) {
 			triggered = true;
 			break;
 		case 32:
+			if(!gameStarted) {
+				gameStarted = true;
+				window.setInterval(update,30);
+				window.setInterval(log,10000);
+			}
+		
 			balloon = b;
 			triggered = true;
 			break;
@@ -59,7 +65,11 @@ function teleport(x,y)
 	player.vy = 0;
 }
 
+gameStarted = false;
 document.onkeypress = function(event) {
+	if(event.which == 32) {
+	}
+	
 	if(event.which == 106) {
 		var s = prompt("Where do you wanna go?");
 
@@ -129,11 +139,11 @@ document.onkeyup = function(event) { return cache(event, false); };
 
 function Player() {
 	var $map = $(".map");
-	$map.append('<img src="man.png" style="position: relative; z-index: 20" id="stickfigure">');
+	$map.append('<img src="player/man_air_01.png" style="position: relative; z-index: 20" id="stickfigure">');
 	this.player = $("#stickfigure", $map);
 	
-	this.x = 0;
-	this.y = 0;
+	this.x = -290;
+	this.y = -112;
 	
 	this.vx = 0;
 	this.vy = 0;
@@ -143,7 +153,7 @@ function Player() {
 	var lastPressed = "right";
 	
 	var frame = 0;
-	var animation = "fall";
+	var animation = "air";
 	var justJumped = true;
 	
 	var cnt = 0;
@@ -174,6 +184,7 @@ function Player() {
 		}
 		else
 			player.vx = 0;
+			
 		var currentClimbable = climbableAtPixel(player.centerX(), player.centerY());
 		if(upPressed) {
 			if(isGrounded && !this.climbing) {
@@ -185,12 +196,19 @@ function Player() {
 					player.vy = -2;
 					this.climbing = true;
 			}
+			else
+				this.climbing = false;
 			
 		}
 		else {
 			if(this.climbing) {
-				if(!currentClimbable)
+				if(!currentClimbable) {
 					this.climbing = false;
+					
+				}
+				else if(downPressed) {
+					player.vy = 2;
+				}
 				else
 					this.vy = 0;
 			}
@@ -296,8 +314,6 @@ function update() {
 	map.position()[1] = y+camy;
 	
 	map.update();
-
-		
 	
 	//player.player.offset({left: 650, top: 400});
 	player.player.offset({left: 650+camx, top: 400+camy});
@@ -481,8 +497,5 @@ $(function() {
 	map=new Map($('#comic'));
 	initMapPos = [Math.floor(map.position()[0]), Math.floor(map.position()[1])];
 	player = new Player();
-	window.setInterval(update,30);
-	
-	window.setInterval(log,10000);
-	
+	update();
 });
