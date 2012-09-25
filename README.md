@@ -1,0 +1,4 @@
+PressAndMove
+============
+
+XKCD Homage | ClickAndDrag
