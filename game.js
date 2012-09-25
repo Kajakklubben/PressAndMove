@@ -26,8 +26,6 @@ function cache(event, b) {
 			triggered = true;
 			 break;
 		case 38:
-			if(!upPressed)
-				upPressedNow = true;
 			upPressed = b;
 			triggered = true;
 			
@@ -117,12 +115,10 @@ function Player() {
 		else
 			player.vx = 0;
 			
-		if(upPressedNow) {
-			if(isGrounded)
-				player.vy = -10;
-			upPressedNow = false;
-		}
-		if(balloon)
+		if(isGrounded && upPressed)
+			player.vy = -10;
+
+				if(balloon)
 		{
 			if(player.vy>-6)
 				player.vy += -2;
@@ -352,7 +348,7 @@ function materialAtImagePixel(name, x, y) {
 	if(data[1] > 50)
 		return "climbable";
 	if(data[2] > 50)
-		return "water";
+		return "w";
 	return "air"
 }
 	
