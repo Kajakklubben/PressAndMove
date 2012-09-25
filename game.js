@@ -144,6 +144,7 @@ function Player() {
 	
 	var frame = 0;
 	var animation = "fall";
+	var justJumped = true;
 	
 	var cnt = 0;
 	
@@ -175,15 +176,11 @@ function Player() {
 			player.vx = 0;
 		var currentClimbable = climbableAtPixel(player.centerX(), player.centerY());
 		if(upPressed) {
-			if(isGrounded && !this.climbing)
+			if(isGrounded && !this.climbing) {
+				justJumped = true;
 				player.vy = -10;
-
-			if(balloon)
-			{
-				if(player.vy>-6)
-					player.vy += -2;
 			}
-			
+
 			if(currentClimbable) {
 					player.vy = -2;
 					this.climbing = true;
@@ -199,6 +196,13 @@ function Player() {
 			}
 		}
 		
+		if(balloon)
+		{
+			if(player.vy>-6)
+				player.vy += -2;
+		}
+
+		
 		cnt=(cnt+1)%2;
 		if(cnt == 0)
 			this.animate();
@@ -212,13 +216,26 @@ function Player() {
 	}
 	
 	this.animate = function() {
-		if(player.vy > 5) {
+	
+		if(player.vy > 8) {
 			animation = "fall"
 			frame = 0;
 		}
 		else if(player.vy < 0) {
-			frame = 0;
-			animation = "air"
+			if(balloon) {
+				frame = 0;
+				animation = "air"
+			}
+			else {
+				if(animation == "jump") {
+					frame = (frame+1);
+					frame = frame > 4 ? 4 : frame;
+				}
+				else {
+					frame = 0;
+				}
+				animation = "jump"
+			}
 		}
 		else if(Math.abs(player.vx) > 1) {
 			if(animation == "run") {
@@ -242,6 +259,8 @@ function Player() {
 		}
 		
 		var ani = "player\\man_" + animation +  "_" + pad(1+frame, 2) + ".png";
+		if(animation == "jump")
+			console.log(ani);
 		
 		this.player.attr("src", ani);
 	}
