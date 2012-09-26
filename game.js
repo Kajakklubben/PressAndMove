@@ -6,6 +6,7 @@ var debugSpeed = false;
 var balloon = false;
 var upPressedNow = false;
 var isGrounded = false;
+var wasGrounded = false;
 
 function pad(number, length) {
    
@@ -45,7 +46,7 @@ function cache(event, b) {
 		case 32:
 			if(!gameStarted) {
 				gameStarted = true;
-				window.setInterval(update,30);
+				window.setInterval(update,15);
 				window.setInterval(log,10000);
 			}
 		
@@ -160,6 +161,8 @@ function Player() {
 	
 	var cnt = 0;
 	
+	
+	
 	this.centerX = function() {
 		return player.player.position().left+player.player.width()/2.0;
 	}
@@ -224,11 +227,6 @@ function Player() {
 			if(player.vy>-6)
 				player.vy += -2;
 		}
-
-		
-		cnt=(cnt+1)%2;
-		if(cnt == 0)
-			this.animate();
 		
 		if(lastPressed != "right") {
 			this.player.addClass("flip-horizontal");
@@ -238,57 +236,62 @@ function Player() {
 		}
 	}
 	
-	this.animate = function() {
-	
-		if(player.vy > 8) {
-			if(animation == "fall") {
+	this.animateFrame = function(ani, frms, loop, stp) {
+		if(animation == ani) {
+			if(stp != undefined) {
+				cnt++;
+				if(cnt%stp!=0)
+					return;
+			}
+			if(!loop) {
 				frame = (frame+1);
-				frame = frame > 1 ? 1 : frame;
+				frame = frame > frms-1 ? frms-1 : frame;
 			}
 			else
-				frame = 0;
-			animation = "fall";
+				frame = (frame+1)%frms;
+
+		}
+		else {
+			cnt = 0;
+			frame = 0;
+		}
+			
+		animation = ani;
+	}
+	var landEnd = false;
+	this.animate = function() {
+		if(animation == "land" && frame < 5 && !landEnd) {
+			if(frame==4)
+				landEnd = true;
+			this.animateFrame("land", 5, true, 3);
+		}
+		else if(balloon) {
+			this.animateFrame("air", 1, true, 2);
+		}
+		else if(isGrounded && !wasGrounded) {
+			landEnd = false;
+			this.animateFrame("land", 5, true, 3);
+		}
+		else if(player.climbing) {
+			this.animateFrame("run", 1, true, 2);
 		}
 		else if(player.vy < 0) {
-			if(balloon) {
-				frame = 0;
-				animation = "air"
-			}
-			else {
-				if(animation == "jump") {
-					frame = (frame+1);
-					frame = frame > 1 ? 1 : frame;
-				}
-				else {
-					frame = 0;
-				}
-				animation = "jump"
-			}
+			this.animateFrame("jump", 2, false, 2);
 		}
-		else if(Math.abs(player.vx) > 1 && animation != "air") {
-			if(animation == "run") {
-				frame = (frame+1)%8;
-			}
-			else {
-				frame = 0;
-			}
-				
-			animation = "run"
+		else if(player.vy > 7) {
+			this.animateFrame("fall", 2, false, 2);
 		}
-		else if(animation != "air") {
-			if(animation == "idle") {
-				frame = (frame+1)%2;
-			}
-			else {
-				frame = 0;
-			}
-				
-			animation = "idle"
+		else if(leftPressed || rightPressed) {
+			this.animateFrame("run", 8, true, 2);
+		}
+		else if(player.vy==0 && isGrounded) {
+			this.animateFrame("idle", 2, true, 2);
 		}
 		
 		var ani = "player\\man_" + animation +  "_" + pad(1+frame, 2) + ".png";
 		
 		this.player.attr("src", ani)
+		
 	}
 }
 var camx = 100.0;
@@ -297,8 +300,8 @@ var camy = 40.0;
 function update() {
 	player.update();
 	
+	player.animate();
 	updatePhysics();
-	
 	
 	
 
@@ -344,8 +347,10 @@ function log(){
 var groundedFrames;
 function updatePhysics()
 {
-	if(groundedFrames==0)
+	wasGrounded = isGrounded;
+	if(groundedFrames==0) {
 		isGrounded = false;
+	}
 	else
 		groundedFrames--;
 		
@@ -359,8 +364,8 @@ function updatePhysics()
 		player.vy = 20;
 	}
 
-	var dirX =player.vx>0?1:-1;
-	var dirY =player.vy>0?1:-1;
+	var dirX = player.vx>0?1:-1;
+	var dirY = player.vy>0?1:-1;
 	var centerHorDist = PlayerRaytrace(dirX*playerWidth/2,playerHeight/5,dirX,0,Math.abs(player.vx));
 	var stopHorizontal = false;
 	if(centerHorDist!=-1)
