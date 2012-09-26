@@ -64,7 +64,7 @@ function teleport(x,y)
 	player.x = x;
 	player.y = y;
 	player.vx = 0;
-	player.vy = 0;
+	player.vy = -5;
 	camx = 0;
 	camy = 0;
 }
@@ -181,12 +181,11 @@ function Player() {
 			factor = 0.5;
 			
 		if(leftPressed) {
-			player.vx = -7*factor;
-			
+			player.vx = Math.max(-7,player.vx-2)*factor;
 			lastPressed = "left";
 		}
 		else if(rightPressed) {
-			player.vx = 7*factor;
+			player.vx = Math.min(7,player.vx+2)*factor;
 			lastPressed = "right";
 		}
 		else
@@ -401,7 +400,7 @@ function updatePhysics()
 		
 	if(centerVerDistLeft != -1 || centerVerDistRight != -1) {
 		
-		if(player.vy>=0) // only when falling down
+		if(player.vy>0) // only when falling down
 		{
 			groundedFrames = 3; // we are grounded for the next 3 frames
 			isGrounded = true; 
@@ -425,7 +424,7 @@ function PlayerRaytrace(xoffset,yoffset,dx,dy,dist,flip) {
 	var x = player.centerX()+xoffset;
 	var y = player.centerY()+yoffset;
 	
-	var maxraytrace = 7.0; //lower this to gain performance. 10 might be too small
+	var maxraytrace = 10.0; //lower this to gain performance. 10 might be too small
 	
 	var step = Math.ceil(dist/maxraytrace);
 	
@@ -435,8 +434,8 @@ function PlayerRaytrace(xoffset,yoffset,dx,dy,dist,flip) {
 		ground = groundAtPixel(x+i*dx, y+i*dy);
 		if((!flip && ground) || (flip && !ground))
 			return i;
-		//we always want to trace the first 3 pixels due to better walking
-		if(i<3)
+		//we always want to trace the first  pixels due to better walking
+		if(i<2)
 			i++;
 		else
 			i+=step;
