@@ -63,6 +63,8 @@ function teleport(x,y)
 	player.y = y;
 	player.vx = 0;
 	player.vy = 0;
+	camx = 0;
+	camy = 0;
 }
 
 gameStarted = false;
@@ -371,22 +373,29 @@ function updatePhysics()
 		
 	}
 	
-	var centerVerDist = PlayerRaytrace(0,dirY*playerHeight/2,0,dirY,Math.abs(player.vy));
-	if(centerVerDist != -1) {
+	var centerVerDistLeft = PlayerRaytrace(-2+player.vx,dirY*playerHeight/2,0,dirY,Math.abs(player.vy));
+	var centerVerDistRight = PlayerRaytrace(2+player.vx,dirY*playerHeight/2,0,dirY,Math.abs(player.vy));
+	
+	if(centerVerDistLeft != -1 && centerVerDistRight == -1)
+		player.vx +=2;
+	if(centerVerDistLeft == -1 && centerVerDistRight != -1)
+		player.vx -=2;
 		
-		groundedFrames = 3; // we are grounded for the next 3 frames
-		isGrounded = true; 
-		player.vy = 0;
+	if(centerVerDistLeft != -1 || centerVerDistRight != -1) {
 		
-		var dist = PlayerRaytrace(0,dirY*playerHeight/2+Math.abs(player.vy),0,-dirY,playerHeight,true);
-		if(dist != -1)
+		if(player.vy>=0) // only when falling down
 		{
-			
-			player.y = player.y - (dist-1);
-			
+			groundedFrames = 3; // we are grounded for the next 3 frames
+			isGrounded = true; 
 		}
+		if(centerVerDistLeft != -1 && centerVerDistRight != -1) 
+			player.vy = 0;
+		
+		var dist = PlayerRaytrace(player.vx,dirY*playerHeight/2+player.vy,0,-dirY,playerHeight,true);
+		if(dist != -1)
+			player.y = player.y - (dist-1);
 		else
-		player.vy = dirY*(centerVerDist);
+			player.vy = dirY*Math.min(centerVerDistRight,centerVerDistLeft);
 
 	}
 
@@ -398,7 +407,7 @@ function PlayerRaytrace(xoffset,yoffset,dx,dy,dist,flip) {
 	var x = player.centerX()+xoffset;
 	var y = player.centerY()+yoffset;
 	
-	var maxraytrace = 6.0; //lower this to gain performance. 10 might be too small
+	var maxraytrace = 7.0; //lower this to gain performance. 10 might be too small
 	
 	var step = Math.ceil(dist/maxraytrace);
 	
