@@ -178,14 +178,17 @@ function Player() {
 			factor = 10;
 		}
 		if(!isGrounded)
-			factor = 0.5;
+			factor = 0.7;
 			
 		if(leftPressed) {
-			player.vx = Math.max(-7,player.vx-2)*factor;
+			if(player.vx>-7)
+				player.vx -=2*factor;
+			
 			lastPressed = "left";
 		}
 		else if(rightPressed) {
-			player.vx = Math.min(7,player.vx+2)*factor;
+			if(player.vx<7)
+				player.vx +=2*factor;
 			lastPressed = "right";
 		}
 		else
@@ -523,4 +526,8 @@ $(function() {
 	initMapPos = [Math.floor(map.position()[0]), Math.floor(map.position()[1])];
 	player = new Player();
 	update();
+	//camera position in comic
+	camx = 100.0;
+	camy = 40.0;
+	
 });
