@@ -475,17 +475,14 @@ function groundAtPixel(x, y) {
 }
 
 function materialAtPixel(x, y) {
-	var img = getImageForPixel(x, y)[0];
+	var img = getImageForPixel(x, y);
 
 	if(img != undefined)  {
-		var splitted = img.src.substring(0, img.src.length - 4).split("/");
-		
-		var name = splitted[splitted.length-1];
 
-		var localX = x - $(img).position().left;
-		var localY = y - $(img).position().top;
+		var localX = x - $(img).left;
+		var localY = y - $(img).top;
 		
-		return materialAtImagePixel(name, localX, localY);
+		return materialAtImagePixel(img.id, localX, localY);
 	}
 	return "air";
 }
@@ -505,18 +502,17 @@ function materialAtImagePixel(name, x, y) {
 }
 
 function getImageForPixel(x, y) {
-	return $(".map img").not("#stickfigure").filter(function(index) {
-		var $this = $(this);
-		var lowerX = $this.position().left;
-		var upperX = $this.position().left +  $this.width();
+	for(var i = 0;i < activeMaps.length;i++) {
+		var lowerX = activeMaps[i].left;
+		var upperX = activeMaps[i].left +  activeMaps[i].width;
 
-		var lowerY = $this.position().top;
-		var upperY = $this.position().top +  $this.height();
+		var lowerY = activeMaps[i].top;
+		var upperY = activeMaps[i].top +  activeMaps[i].height;
 		
-		if(lowerX < x && x < upperX && lowerY < y && y < upperY)
-			return true;
-		return false;
-	});
+		if(lowerX < x && x < upperX && lowerY < y && y < upperY);
+			return activeMaps[i];
+	}
+	throw "Problem";
 }
 
 var player;
