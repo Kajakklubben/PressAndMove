@@ -27,6 +27,9 @@ function cache(event, b) {
 			triggered = true;
 			 break;
 		case 38:
+			if(!upPressed && b)
+				upPressedNow = true;
+				
 			upPressed = b;
 			triggered = true;
 			
@@ -132,6 +135,9 @@ document.onkeypress = function(event) {
 			case '-1':
 				teleport(97724,-490); // end of the world?
 			break;
+			case '-2':
+				teleport(-650,29850); // end of the world?
+			break;
 		}
 
 	}
@@ -197,9 +203,11 @@ function Player() {
 			
 		var currentClimbable = climbableAtPixel(player.centerX(), player.centerY());
 		if(upPressed) {
-			if(isGrounded && !this.climbing) {
+			if(isGrounded && !this.climbing && headFree && upPressedNow) {
 				justJumped = true;
-				player.vy = -10;
+				player.vy = -12;
+				console.log('jump');
+				
 			}
 
 			if(currentClimbable) {
@@ -238,6 +246,8 @@ function Player() {
 		else {
 			this.player.removeClass("flip-horizontal");
 		}
+		
+		upPressedNow = false;
 	}
 	
 	this.animateFrame = function(ani, frms, loop, stp) {
@@ -349,6 +359,7 @@ function log(){
 }
 
 var groundedFrames;
+var headFree;
 function updatePhysics()
 {
 	wasGrounded = isGrounded;
@@ -357,7 +368,11 @@ function updatePhysics()
 	}
 	else
 		groundedFrames--;
-		
+	
+	headFree = PlayerRaytrace(0,-20,0,-1,1);
+if(headFree != -1 && player.vy<0)
+	player.vy = 0;
+	
 	var playerWidth = 20;
 	var playerHeight = 60;
 	
@@ -404,7 +419,11 @@ function updatePhysics()
 			isGrounded = true; 
 		}
 		if(centerVerDistLeft != -1 && centerVerDistRight != -1) 
+		{
 			player.vy = 0;
+			
+	
+		}
 		
 		var dist = PlayerRaytrace(player.vx,dirY*playerHeight/2+player.vy,0,-dirY,playerHeight,true);
 		if(dist != -1)
@@ -442,28 +461,7 @@ function PlayerRaytrace(xoffset,yoffset,dx,dy,dist,flip) {
 
 }
 
-function PlayerFeetCollision(dx,dy) {
-	var leftX = player.player.position().left+dx;
-	var rightX = player.player.position().left + player.player.width()+dx;
-	var y = player.player.position().top + player.player.height()+dy;
-	
-	if(groundAtPixel(leftX, y) || groundAtPixel(rightX, y))
-		return true;
-	
-	return false;
-}
-
-function PlayerBodyCollision(dx,dy) {
-	var leftX = player.player.position().left+dx;
-	var rightX = player.player.position().left + player.player.width()+dx;
-	var y = player.player.position().top + player.player.height()/2+dy;
-	
-	if(groundAtPixel(leftX, y) || groundAtPixel(rightX, y))
-		return true;
-	
-	return false;
-}
-
+var  climbable = 1;
 function climbableAtPixel(x, y) {
 	return materialAtPixel(x, y) == "climbable";
 }
@@ -475,7 +473,6 @@ function waterAtPixel(x, y) {
 function groundAtPixel(x, y) {
 	return materialAtPixel(x, y) == "ground";
 }
-
 function materialAtPixel(x, y) {
 	var img = getImageForPixel(x, y)[0];
 
@@ -506,9 +503,23 @@ function materialAtImagePixel(name, x, y) {
 	return "air"
 }
 	
-	
+var lastImg;
 function getImageForPixel(x, y) {
-	return $(".map img").not("#stickfigure").filter(function(index) {
+	if(lastImg != undefined && lastImg[0] != undefined)
+	{
+		//console.log(lastImg[0]);
+		var $this = $(lastImg[0]);
+		var lowerX = $this.position().left;
+		var upperX = $this.position().left +  $this.width();
+
+		var lowerY = $this.position().top;
+		var upperY = $this.position().top +  $this.height();
+		
+		if(lowerX < x && x < upperX && lowerY < y && y < upperY)
+			return lastImg;
+	}
+	
+	lastImg = $(".map img").not("#stickfigure").filter(function(index) {
 		var $this = $(this);
 		var lowerX = $this.position().left;
 		var upperX = $this.position().left +  $this.width();
@@ -520,6 +531,8 @@ function getImageForPixel(x, y) {
 			return true;
 		return false;
 	});
+	
+	return lastImg;
 }
 
 var player;
