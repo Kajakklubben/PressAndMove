@@ -207,7 +207,7 @@ function Player() {
 			if(isGrounded && !this.climbing && headFree && upPressedNow) {
 				justJumped = true;
 				player.vy = -12;
-				console.log('jump');
+				
 				
 			}
 
@@ -461,18 +461,20 @@ function PlayerRaytrace(xoffset,yoffset,dx,dy,dist,flip) {
 	return -1;
 
 }
-
-var  climbable = 1;
+var  col_air = 0;
+var  col_climbable = 1;
+var  col_water = 2;
+var  col_ground = 3;
 function climbableAtPixel(x, y) {
-	return materialAtPixel(x, y) == "climbable";
+	return materialAtPixel(x, y) == col_climbable;
 }
 
 function waterAtPixel(x, y) {
-	return materialAtPixel(x, y) == "water";
+	return materialAtPixel(x, y) == col_water;
 }
 
 function groundAtPixel(x, y) {
-	return materialAtPixel(x, y) == "ground";
+	return materialAtPixel(x, y) == col_ground;
 }
 function materialAtPixel(x, y) {
 	var img = getImageForPixel(x, y);
@@ -485,23 +487,23 @@ function materialAtPixel(x, y) {
 		
 		return materialAtImagePixel(img.id, localX, localY);
 	}
-	return "air";
+	return col_air;
 }
 	
 function materialAtImagePixel(name, x, y) {
 	if(document.getElementById(name) == null)
-		return "air"; 
+		return col_air; 
 		
 	var context = document.getElementById(name).getContext('2d');
 	data = context.getImageData(x, y, 1, 1).data;
 	
 	if(data[0] <  50 && data[1] < 50 && data[2] < 50)
-		return "ground";
+		return col_ground;
 	if(data[0] < 50 && data[1] > 50 && data[2] <  50 )
-		return "climbable";
+		return col_climbable;
 	if(data[0] < 50 && data[1] <  50 && data[2] > 50)
-		return "water";
-	return "air"
+		return col_water;
+	return col_air;
 }
 
 var lastMap;
@@ -525,7 +527,7 @@ function getImageForPixel(x, y) {
 		
 	}
 	lastMap = $(activeMaps).filter(function(index) {
-		console.log('new map');
+		
 		var lowerX = this.left;
 		var upperX = this.left +  this.width;
 
