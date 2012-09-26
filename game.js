@@ -490,7 +490,7 @@ function materialAtPixel(x, y) {
 	
 function materialAtImagePixel(name, x, y) {
 	if(document.getElementById(name) == null)
-		return false; 
+		return "air"; 
 		
 	var context = document.getElementById(name).getContext('2d');
 	data = context.getImageData(x, y, 1, 1).data;

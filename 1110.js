@@ -351,11 +351,6 @@ var Map=function($container){
 			
 			activeMaps = $(".map img").not("#stickfigure").map(function (i, e) {
 				var $this = $(this);
-				
-				var canvas = $("#canvaseditor #" + $this.data('name'))[0];
-				var context = null;
-				if(canvas)
-					context = canvas.getContext('2d');
 
 				return {
 						left: 	$this.position().left,
@@ -364,7 +359,6 @@ var Map=function($container){
 						height: $this.height(),
 						src:	$this.attr('src'),
 						id: 	$this.data('name'),
-						context: context
 					}
 			});
 		}
