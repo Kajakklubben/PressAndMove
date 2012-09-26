@@ -479,22 +479,25 @@ function groundAtPixel(x, y) {
 
 function materialAtPixel(x, y) {
 	var img = getImageForPixel(x, y);
+	
 
 	if(img != undefined)  {
 
-		var localX = x - $(img).left;
-		var localY = y - $(img).top;
+		var localX = x - img.left;
+		var localY = y - img.top;
 		
-		return materialAtImagePixel(img.id, localX, localY);
+		return materialAtImagePixel(img, localX, localY);
 	}
 	return "air";
 }
 	
-function materialAtImagePixel(name, x, y) {
+function materialAtImagePixel(img, x, y) {
 	if(document.getElementById(name) == null)
 		return false; 
-	var context = document.getElementById(name).getContext('2d');
+		
+	var context = img.context;
 	data = context.getImageData(x, y, 1, 1).data;
+	
 	if(data[0] <  50 && data[1] < 50 && data[2] < 50)
 		return "ground";
 	if(data[0] < 50 && data[1] > 50 && data[2] <  50 )
@@ -504,7 +507,7 @@ function materialAtImagePixel(name, x, y) {
 	return "air"
 }
 
-function getImageForPixel(x, y) {
+/*function getImageForPixel(x, y) {
 	for(var i = 0;i < activeMaps.length;i++) {
 		var lowerX = activeMaps[i].left;
 		var upperX = activeMaps[i].left +  activeMaps[i].width;
@@ -516,6 +519,20 @@ function getImageForPixel(x, y) {
 			return activeMaps[i];
 	}
 	throw "Problem";
+}*/
+var activeMaps;
+function getImageForPixel(x, y) {
+	return $(activeMaps).filter(function(index) {
+		var lowerX = this.left;
+		var upperX = this.left +  this.width;
+
+		var lowerY = this.top;
+		var upperY = this.top +  this.height;
+		
+		if(lowerX < x && x < upperX && lowerY < y && y < upperY)
+			return true;
+		return false;
+	})[0];
 }
 
 var player;
