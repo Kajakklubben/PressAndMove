@@ -50,7 +50,7 @@ function cache(event, b) {
 			if(!gameStarted) {
 				gameStarted = true;
 				player.vy = -10;
-				window.setInterval(update,15);
+				window.setInterval(update,33);
 				window.setInterval(log,10000);
 			}
 		
@@ -504,9 +504,28 @@ function materialAtImagePixel(name, x, y) {
 	return "air"
 }
 
+var lastMap;
 var activeMaps;
 function getImageForPixel(x, y) {
-	return $(activeMaps).filter(function(index) {
+	
+	if(lastMap != undefined)
+	{
+		var map = lastMap;
+		var lowerX = map.left;
+		var upperX = map.left +  map.width;
+
+		var lowerY = map.top;
+		var upperY = map.top +  map.height;
+		
+		if(lowerX < x && x < upperX && lowerY < y && y < upperY)
+		{
+			
+			return lastMap;
+		}
+		
+	}
+	lastMap = $(activeMaps).filter(function(index) {
+		console.log('new map');
 		var lowerX = this.left;
 		var upperX = this.left +  this.width;
 
@@ -517,6 +536,9 @@ function getImageForPixel(x, y) {
 			return true;
 		return false;
 	})[0];
+	return lastMap;
+	
+
 }
 
 var player;
