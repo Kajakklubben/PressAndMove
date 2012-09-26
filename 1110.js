@@ -321,7 +321,7 @@ var Map=function($container){
 				if(tile.length)
 					$remove=$remove.not(tile);
 				else if(mapPart[name] != undefined) {
-					$image=$('<img class="tile'+name+'" src="imgs/'+name+'.png" style="top:'+((centre[1]+y)*tilesize)+'px;left:'+((centre[0]+x)*tilesize)+'px; z-index: -1; position: absolute;;" style="display:none" />');
+					$image=$('<img data-name="' + name + '" class="tile'+name+'" src="imgs/'+name+'.png" style="top:'+((centre[1]+y)*tilesize)+'px;left:'+((centre[0]+x)*tilesize)+'px; z-index: -1; position: absolute;;" style="display:none" />');
 
 					$image.load(function(){$(this).show()}).error(function(){$(this).remove();});
 					$map.append($image);
@@ -343,12 +343,30 @@ var Map=function($container){
 						}}(name));
 					}
 					
-					$("#canvascontainer").hide();
 					
 				}
 			}
 
 			$remove.remove();
+			
+			activeMaps = $(".map img").not("#stickfigure").map(function (i, e) {
+				var $this = $(this);
+				
+				var canvas = $("#canvaseditor #" + $this.data('name'))[0];
+				var context = null;
+				if(canvas)
+					context = canvas.getContext('2d');
+
+				return {
+						left: 	$this.position().left,
+						top: 	$this.position().top,
+						width: 	$this.width(),
+						height: $this.height(),
+						src:	$this.attr('src'),
+						id: 	$this.data('name'),
+						context: context
+					}
+			});
 		}
 	}
 

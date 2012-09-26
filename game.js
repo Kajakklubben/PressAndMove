@@ -49,6 +49,7 @@ function cache(event, b) {
 		case 32:
 			if(!gameStarted) {
 				gameStarted = true;
+				player.vy = -10;
 				window.setInterval(update,15);
 				window.setInterval(log,10000);
 			}
@@ -147,9 +148,9 @@ document.onkeydown = function(event) { return cache(event, true);  };
 document.onkeyup = function(event) { return cache(event, false); };
 
 function Player() {
-	var $map = $(".map");
-	$map.append('<img src="player/man_air_01.png" style="position: relative; z-index: 20" id="stickfigure">');
-	this.player = $("#stickfigure", $map);
+	this.map = $(".map");
+	this.map.append('<img src="player/man_air_01.png" style="position: relative; z-index: 20" id="stickfigure">');
+	this.player = $("#stickfigure", this.map);
 	
 	this.x = -330;
 	this.y = -112;
@@ -237,7 +238,7 @@ function Player() {
 		if(balloon)
 		{
 			if(player.vy>-6)
-				player.vy += -1;
+				player.vy += -1.2;
 		}
 		
 		if(lastPressed != "right") {
@@ -282,7 +283,7 @@ function Player() {
 		else if(balloon) {
 			this.animateFrame("air", 1, true, 2);
 		}
-		else if(isGrounded && !wasGrounded) {
+		else if(isGrounded && !wasGrounded && lastVY > 15) {
 			landEnd = false;
 			this.animateFrame("land", 5, true, 3);
 		}
@@ -311,15 +312,13 @@ function Player() {
 var camx = 100.0;
 var camy = 40.0;
 
+var lastVY;
+
 function update() {
 	player.update();
 	
 	updatePhysics();
 	player.animate();
-	
-	
-
-	
 
 	camy += (player.y-camy)/4.0;
 	camx += (player.x-camx)/4.0;
@@ -344,6 +343,8 @@ function update() {
 	
 	//player.player.offset({left: 650, top: 400});
 	player.player.offset({left: 650+(player.x-camx), top: 400+(player.y-camy)});
+
+	lastVY = player.vy;
 }
 
 function log(){
@@ -441,7 +442,7 @@ function PlayerRaytrace(xoffset,yoffset,dx,dy,dist,flip) {
 	var x = player.centerX()+xoffset;
 	var y = player.centerY()+yoffset;
 	
-	var maxraytrace = 10.0; //lower this to gain performance. 10 might be too small
+	var maxraytrace = 5.0; //lower this to gain performance. 10 might be too small
 	
 	var step = Math.ceil(dist/maxraytrace);
 	
@@ -474,17 +475,15 @@ function groundAtPixel(x, y) {
 	return materialAtPixel(x, y) == "ground";
 }
 function materialAtPixel(x, y) {
-	var img = getImageForPixel(x, y)[0];
+	var img = getImageForPixel(x, y);
+	
 
 	if(img != undefined)  {
-		var splitted = img.src.substring(0, img.src.length - 4).split("/");
-		
-		var name = splitted[splitted.length-1];
 
-		var localX = x - $(img).position().left;
-		var localY = y - $(img).position().top;
+		var localX = x - img.left;
+		var localY = y - img.top;
 		
-		return materialAtImagePixel(name, localX, localY);
+		return materialAtImagePixel(img.id, localX, localY);
 	}
 	return "air";
 }
@@ -492,8 +491,10 @@ function materialAtPixel(x, y) {
 function materialAtImagePixel(name, x, y) {
 	if(document.getElementById(name) == null)
 		return false; 
+		
 	var context = document.getElementById(name).getContext('2d');
 	data = context.getImageData(x, y, 1, 1).data;
+	
 	if(data[0] <  50 && data[1] < 50 && data[2] < 50)
 		return "ground";
 	if(data[0] < 50 && data[1] > 50 && data[2] <  50 )
@@ -502,37 +503,20 @@ function materialAtImagePixel(name, x, y) {
 		return "water";
 	return "air"
 }
-	
-var lastImg;
+
+var activeMaps;
 function getImageForPixel(x, y) {
-	if(lastImg != undefined && lastImg[0] != undefined)
-	{
-		//console.log(lastImg[0]);
-		var $this = $(lastImg[0]);
-		var lowerX = $this.position().left;
-		var upperX = $this.position().left +  $this.width();
+	return $(activeMaps).filter(function(index) {
+		var lowerX = this.left;
+		var upperX = this.left +  this.width;
 
-		var lowerY = $this.position().top;
-		var upperY = $this.position().top +  $this.height();
-		
-		if(lowerX < x && x < upperX && lowerY < y && y < upperY)
-			return lastImg;
-	}
-	
-	lastImg = $(".map img").not("#stickfigure").filter(function(index) {
-		var $this = $(this);
-		var lowerX = $this.position().left;
-		var upperX = $this.position().left +  $this.width();
-
-		var lowerY = $this.position().top;
-		var upperY = $this.position().top +  $this.height();
+		var lowerY = this.top;
+		var upperY = this.top +  this.height;
 		
 		if(lowerX < x && x < upperX && lowerY < y && y < upperY)
 			return true;
 		return false;
-	});
-	
-	return lastImg;
+	})[0];
 }
 
 var player;
