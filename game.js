@@ -200,9 +200,9 @@ function Player() {
 		else
 			player.vx = 0;
 			
-		this.inWater = waterAtPixel(player.centerX(), player.centerY()+10);
+		this.inWater = materialAtPixel(player.centerX(), player.centerY()+10) == col_water;
 			
-		var currentClimbable = climbableAtPixel(player.centerX(), player.centerY());
+		var currentClimbable = materialAtPixel(player.centerX(), player.centerY()) == col_climbable;
 		if(upPressed) {
 			if(isGrounded && !this.climbing && headFree && upPressedNow) {
 				justJumped = true;
@@ -404,8 +404,8 @@ if(headFree != -1 && player.vy<0)
 		
 	}
 	
-	var centerVerDistLeft = PlayerRaytrace(-2+player.vx,dirY*playerHeight/2,0,dirY,Math.abs(player.vy));
-	var centerVerDistRight = PlayerRaytrace(2+player.vx,dirY*playerHeight/2,0,dirY,Math.abs(player.vy));
+	var centerVerDistLeft = PlayerRaytrace(-2,dirY*playerHeight/2,0,dirY,Math.abs(player.vy));
+	var centerVerDistRight = PlayerRaytrace(2,dirY*playerHeight/2,0,dirY,Math.abs(player.vy));
 	
 	if(centerVerDistLeft != -1 && centerVerDistRight == -1)
 		player.vx +=2;
@@ -449,7 +449,7 @@ function PlayerRaytrace(xoffset,yoffset,dx,dy,dist,flip) {
 	var ground = false;
 	for(i = 0;i<dist;)
 	{
-		ground = groundAtPixel(x+i*dx, y+i*dy);
+		ground = materialAtPixel(x+i*dx, y+i*dy) == col_ground;
 		if((!flip && ground) || (flip && !ground))
 			return i;
 		//we always want to trace the first  pixels due to better walking
@@ -465,17 +465,7 @@ var  col_air = 0;
 var  col_climbable = 1;
 var  col_water = 2;
 var  col_ground = 3;
-function climbableAtPixel(x, y) {
-	return materialAtPixel(x, y) == col_climbable;
-}
 
-function waterAtPixel(x, y) {
-	return materialAtPixel(x, y) == col_water;
-}
-
-function groundAtPixel(x, y) {
-	return materialAtPixel(x, y) == col_ground;
-}
 function materialAtPixel(x, y) {
 	var img = getImageForPixel(x, y);
 	
