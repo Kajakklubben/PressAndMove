@@ -531,4 +531,6 @@ $(function() {
 	camx = 100.0;
 	camy = 40.0;
 	
+	$("#canvascontainer").hide();
+	
 });
