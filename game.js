@@ -407,7 +407,7 @@ function PlayerRaytrace(xoffset,yoffset,dx,dy,dist,flip) {
 	var x = player.centerX()+xoffset;
 	var y = player.centerY()+yoffset;
 	
-	var maxraytrace = 7.0; //lower this to gain performance. 10 might be too small
+	var maxraytrace = 8.0; //lower this to gain performance. 10 might be too small
 	
 	var step = Math.ceil(dist/maxraytrace);
 	
@@ -417,8 +417,8 @@ function PlayerRaytrace(xoffset,yoffset,dx,dy,dist,flip) {
 		ground = groundAtPixel(x+i*dx, y+i*dy);
 		if((!flip && ground) || (flip && !ground))
 			return i;
-		//we always want to trace the first 3 pixels due to better walking
-		if(i<3)
+		//we always want to trace the first  pixels due to better walking
+		if(i<2)
 			i++;
 		else
 			i+=step;
