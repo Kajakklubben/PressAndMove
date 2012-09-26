@@ -152,6 +152,7 @@ function Player() {
 	this.vy = 0;
 	
 	this.climbing = false;
+	this.inWater = false;
 	
 	var lastPressed = "right";
 	
@@ -179,19 +180,18 @@ function Player() {
 			factor = 0.5;
 			
 		if(leftPressed) {
-			
-			if(player.vx>-8*factor)
-			player.vx += -2;
+			player.vx = -7*factor;
 			
 			lastPressed = "left";
 		}
 		else if(rightPressed) {
-			if(player.vx<8*factor)
-			player.vx += 2;
+			player.vx = 7*factor;
 			lastPressed = "right";
 		}
 		else
 			player.vx = 0;
+			
+		this.inWater = waterAtPixel(player.centerX(), player.centerY()+10);
 			
 		var currentClimbable = climbableAtPixel(player.centerX(), player.centerY());
 		if(upPressed) {
@@ -219,13 +219,15 @@ function Player() {
 				}
 				else
 					this.vy = 0;
+			} else if(this.inWater && downPressed) {
+				this.vy = 4;
 			}
 		}
 		
 		if(balloon)
 		{
 			if(player.vy>-6)
-				player.vy += -2;
+				player.vy += -1;
 		}
 		
 		if(lastPressed != "right") {
@@ -278,7 +280,7 @@ function Player() {
 		else if(player.vy < 0) {
 			this.animateFrame("jump", 2, false, 2);
 		}
-		else if(player.vy > 7) {
+		else if(player.vy > 8) {
 			this.animateFrame("fall", 2, false, 2);
 		}
 		else if(leftPressed || rightPressed) {
@@ -300,8 +302,8 @@ var camy = 40.0;
 function update() {
 	player.update();
 	
-	player.animate();
 	updatePhysics();
+	player.animate();
 	
 	
 
@@ -357,7 +359,13 @@ function updatePhysics()
 	var playerWidth = 20;
 	var playerHeight = 60;
 	
-	if(!player.climbing)
+	
+	if(player.inWater) {
+		player.vy -= 0.5;
+		if(player.vy < -4)
+			player.vy = -4;
+	}
+	else if(!player.climbing)
 		player.vy += 1;
 	
 	if(player.vy > 20) { //max fall speed
