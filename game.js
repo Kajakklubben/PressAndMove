@@ -486,16 +486,16 @@ function materialAtPixel(x, y) {
 		var localX = x - img.left;
 		var localY = y - img.top;
 		
-		return materialAtImagePixel(img, localX, localY);
+		return materialAtImagePixel(img.id, localX, localY);
 	}
 	return "air";
 }
 	
-function materialAtImagePixel(img, x, y) {
+function materialAtImagePixel(name, x, y) {
 	if(document.getElementById(name) == null)
 		return false; 
 		
-	var context = img.context;
+	var context = document.getElementById(name).getContext('2d');
 	data = context.getImageData(x, y, 1, 1).data;
 	
 	if(data[0] <  50 && data[1] < 50 && data[2] < 50)
