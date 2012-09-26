@@ -442,7 +442,7 @@ function PlayerRaytrace(xoffset,yoffset,dx,dy,dist,flip) {
 	var x = player.centerX()+xoffset;
 	var y = player.centerY()+yoffset;
 	
-	var maxraytrace = 5.0; //lower this to gain performance. 10 might be too small
+	var maxraytrace = 40.0; //lower this to gain performance. 10 might be too small
 	
 	var step = Math.ceil(dist/maxraytrace);
 	
