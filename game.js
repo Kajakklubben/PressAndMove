@@ -492,7 +492,7 @@ function materialAtPixel(x, y) {
 }
 	
 function materialAtImagePixel(name, x, y) {
-	if(document.getElementById(name) == null)
+	if(img.context == null)
 		return false; 
 		
 	var context = document.getElementById(name).getContext('2d');
