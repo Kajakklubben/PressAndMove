@@ -300,7 +300,7 @@ function Player() {
 			this.animateFrame("run", 8, true, 2);
 		}
 		else if(player.vy==0 && isGrounded) {
-			this.animateFrame("idle", 2, true, 2);
+			this.animateFrame("idle", 15, true, 2);
 		}
 		
 		var ani = "player\\man_" + animation +  "_" + pad(1+frame, 2) + ".png";
@@ -481,10 +481,10 @@ function materialAtPixel(x, y) {
 }
 	
 function materialAtImagePixel(name, x, y) {
-	if(document.getElementById(name) == null)
+	if(collisionMap[name] == undefined)
 		return col_air; 
 		
-	var context = document.getElementById(name).getContext('2d');
+	var context = collisionMap[name];
 	data = context.getImageData(x, y, 1, 1).data;
 	
 	if(data[0] <  50 && data[1] < 50 && data[2] < 50)
@@ -498,6 +498,7 @@ function materialAtImagePixel(name, x, y) {
 
 var lastMap;
 var activeMaps;
+var collisionMap = [];
 function getImageForPixel(x, y) {
 	
 	if(lastMap != undefined)
