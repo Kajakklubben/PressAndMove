@@ -142,9 +142,9 @@ document.onkeydown = function(event) { return cache(event, true);  };
 document.onkeyup = function(event) { return cache(event, false); };
 
 function Player() {
-	var $map = $(".map");
-	$map.append('<img src="player/man_air_01.png" style="position: relative; z-index: 20" id="stickfigure">');
-	this.player = $("#stickfigure", $map);
+	this.map = $(".map");
+	this.map.append('<img src="player/man_air_01.png" style="position: relative; z-index: 20" id="stickfigure">');
+	this.player = $("#stickfigure", this.map);
 	
 	this.x = -330;
 	this.y = -112;
@@ -227,7 +227,7 @@ function Player() {
 		if(balloon)
 		{
 			if(player.vy>-6)
-				player.vy += -1.5;
+				player.vy += -1.2;
 		}
 		
 		if(lastPressed != "right") {
@@ -306,10 +306,6 @@ function update() {
 	
 	updatePhysics();
 	player.animate();
-	
-	
-
-	
 
 	camy += (player.y-camy)/4.0;
 	camx += (player.x-camx)/4.0;
@@ -424,7 +420,7 @@ function PlayerRaytrace(xoffset,yoffset,dx,dy,dist,flip) {
 	var x = player.centerX()+xoffset;
 	var y = player.centerY()+yoffset;
 	
-	var maxraytrace = 10.0; //lower this to gain performance. 10 might be too small
+	var maxraytrace = 5.0; //lower this to gain performance. 10 might be too small
 	
 	var step = Math.ceil(dist/maxraytrace);
 	
@@ -507,8 +503,7 @@ function materialAtImagePixel(name, x, y) {
 		return "water";
 	return "air"
 }
-	
-	
+
 function getImageForPixel(x, y) {
 	return $(".map img").not("#stickfigure").filter(function(index) {
 		var $this = $(this);
