@@ -46,6 +46,7 @@ function cache(event, b) {
 		case 32:
 			if(!gameStarted) {
 				gameStarted = true;
+				player.vy = -10;
 				window.setInterval(update,15);
 				window.setInterval(log,10000);
 			}
@@ -227,7 +228,7 @@ function Player() {
 		if(balloon)
 		{
 			if(player.vy>-6)
-				player.vy += -1;
+				player.vy += -1.5;
 		}
 		
 		if(lastPressed != "right") {
@@ -270,7 +271,7 @@ function Player() {
 		else if(balloon) {
 			this.animateFrame("air", 1, true, 2);
 		}
-		else if(isGrounded && !wasGrounded) {
+		else if(isGrounded && !wasGrounded && lastVY > 15) {
 			landEnd = false;
 			this.animateFrame("land", 5, true, 3);
 		}
@@ -298,6 +299,8 @@ function Player() {
 }
 var camx = 100.0;
 var camy = 40.0;
+
+var lastVY;
 
 function update() {
 	player.update();
@@ -332,6 +335,8 @@ function update() {
 	
 	//player.player.offset({left: 650, top: 400});
 	player.player.offset({left: 650+(player.x-camx), top: 400+(player.y-camy)});
+
+	lastVY = player.vy;
 }
 
 function log(){
