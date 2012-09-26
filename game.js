@@ -59,8 +59,8 @@ function cache(event, b) {
 
 function teleport(x,y)
 {
-	player.nx = x;
-	player.ny = y;
+	player.x = x;
+	player.y = y;
 	player.vx = 0;
 	player.vy = 0;
 }
@@ -142,13 +142,11 @@ function Player() {
 	$map.append('<img src="player/man_air_01.png" style="position: relative; z-index: 20" id="stickfigure">');
 	this.player = $("#stickfigure", $map);
 	
-	this.x = -290;
+	this.x = -330;
 	this.y = -112;
 	
 	this.vx = 0;
 	this.vy = 0;
-	this.nx = 0;
-	this.ny = 0;
 	
 	this.climbing = false;
 	
@@ -177,11 +175,14 @@ function Player() {
 			
 		if(leftPressed) {
 			
-			player.vx = -8*factor;
+			if(player.vx>-8*factor)
+			player.vx += -2;
+			
 			lastPressed = "left";
 		}
 		else if(rightPressed) {
-			player.vx = 8*factor;
+			if(player.vx<8*factor)
+			player.vx += 2;
 			lastPressed = "right";
 		}
 		else
@@ -288,26 +289,29 @@ function Player() {
 		this.player.attr("src", ani)
 	}
 }
-var camx = 0.0;
-var camy = 0.0;
+var camx = 100.0;
+var camy = 40.0;
 
 function update() {
 	player.update();
 	
 	updatePhysics();
 	
-	oldPlayerX = player.x;
 	
-	player.nx += player.vx;
-	player.ny += player.vy;
 	
 
-	camy += (player.y-camy)/3.0;
-	camx += (player.x-camx)/3.0;
 	
+
+	camy += (player.y-camy)/4.0;
+	camx += (player.x-camx)/4.0;
 	
-	player.x = player.nx;
-	player.y = player.ny;
+	camy = Math.floor(camy);
+	camx = Math.floor(camx);
+	
+	oldPlayerX = player.x;
+	
+	player.x += player.vx;
+	player.y += player.vy;
 	
 	
 	var x = initMapPos[0] - camx;
@@ -360,7 +364,7 @@ function updatePhysics()
 	if(centerHorDist!=-1)
 	{
 	
-		player.nx = player.x+dirX*(centerHorDist+playerWidth/2)-dirX*playerWidth/2;
+		player.x = player.x+dirX*(centerHorDist+playerWidth/2)-dirX*playerWidth/2;
 		
 		player.vx = 0;
 		stopHorizontal = true;
@@ -374,11 +378,11 @@ function updatePhysics()
 		isGrounded = true; 
 		player.vy = 0;
 		
-		var dist = PlayerRaytrace(-1,dirY*playerHeight/2+Math.abs(player.vy),0,-dirY,playerHeight,true);
+		var dist = PlayerRaytrace(0,dirY*playerHeight/2+Math.abs(player.vy),0,-dirY,playerHeight,true);
 		if(dist != -1)
 		{
 			
-			player.ny = player.y - (dirY*dist)+1 +dirY*centerVerDist;
+			player.y = player.y - (dist-1);
 			
 		}
 		else
