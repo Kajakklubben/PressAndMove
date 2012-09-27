@@ -518,14 +518,14 @@ function materialAtImagePixel(name, x, y) {
 	if(collisionMap[name] == undefined)
 		return col_air; 
 		
-	var context = collisionMap[name];
-	data = context.getImageData(x, y, 1, 1).data;
-	
-	if(data[0] <  50 && data[1] < 50 && data[2] < 50)
+	var data = collisionMap[name];
+	var i = (Math.floor(y) * 4) * 2048 + (Math.floor(x) * 4);	
+
+	if(data[i+0] <  50 && data[i+1] < 50 && data[i+2] < 50)
 		return col_ground;
-	if(data[0] < 50 && data[1] > 50 && data[2] <  50 )
+	if(data[i+0] < 50 && data[i+1] > 50 && data[i+2] <  50 )
 		return col_climbable;
-	if(data[0] < 50 && data[1] <  50 && data[2] > 50)
+	if(data[i+0] < 50 && data[i+1] <  50 && data[i+2] > 50)
 		return col_water;
 	return col_air;
 }
