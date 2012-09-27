@@ -408,9 +408,17 @@ if(headFree != -1 && player.vy<0)
 	var centerVerDistRight = PlayerRaytrace(2,dirY*playerHeight/2,0,dirY,Math.abs(player.vy));
 	
 	if(centerVerDistLeft != -1 && centerVerDistRight == -1)
+	{
+		player.vx *0.7;
 		player.vx +=2;
+		
+	}
 	if(centerVerDistLeft == -1 && centerVerDistRight != -1)
+	{
+		player.vx *0.7;
 		player.vx -=2;
+		
+	}
 		
 	if(centerVerDistLeft != -1 || centerVerDistRight != -1) {
 		
@@ -425,17 +433,39 @@ if(headFree != -1 && player.vy<0)
 			
 	
 		}
-		
-		var dist = PlayerRaytrace(player.vx,dirY*playerHeight/2+player.vy,0,-dirY,playerHeight,true);
+		//player.vy = dirY*Math.min(centerVerDistRight,centerVerDistLeft);
+		var dist = PlayerRaytrace(player.vx,playerHeight/2+player.vy,0,-1,playerHeight,true);
 		if(dist != -1)
+		{
 			player.y = player.y - (dist-1);
+			//player.vx *0.7;
+		}
 		else
-			player.vy = dirY*Math.min(centerVerDistRight,centerVerDistLeft);
+		{
+			var dist = PlayerRaytrace(player.vx,-playerHeight/2+player.vy,0,1,playerHeight,true);
+			if(dist != -1)
+			{
+				player.y = player.y + (dist-1);
+				//player.vx *0.7;
+			}
+		}
+		console.log(centerVerDistLeft);
+		console.log(centerHorDist);
+		if( centerVerDistLeft == 0 && centerVerDistRight == 0 && centerHorDist == 0 && !headFree)
+		{
+			//we might be stuck
+			player.y = player.y - 10;
+			
+		}
+	
+			
 
 	}
 
 }
 function PlayerRaytrace(xoffset,yoffset,dx,dy,dist,flip) {
+	
+	dist = Math.max(1,dist);
 	if(flip == undefined)
 		flip = false;
 		
