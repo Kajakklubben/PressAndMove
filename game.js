@@ -332,6 +332,12 @@ function update() {
 	player.y += player.vy;
 	
 	
+	updateMap();
+	lastVY = player.vy;
+}
+
+function updateMap()
+{
 	var x = initMapPos[0] - camx;
 	var y = initMapPos[1] - camy;
 
@@ -344,7 +350,6 @@ function update() {
 	//player.player.offset({left: 650, top: 400});
 	player.player.offset({left: 650+(player.x-camx), top: 400+(player.y-camy)});
 
-	lastVY = player.vy;
 }
 
 function log(){
@@ -532,31 +537,14 @@ function getImageForPixel(x, y) {
 	
 	if(lastMap != undefined)
 	{
-		var map = lastMap;
-		var lowerX = map.left;
-		var upperX = map.left +  map.width;
-
-		var lowerY = map.top;
-		var upperY = map.top +  map.height;
-		
-		if(lowerX < x && x < upperX && lowerY < y && y < upperY)
-		{
-			
+		if(lastMap.left < x && x < lastMap.left +  lastMap.width && lastMap.top < y && y < lastMap.top +  lastMap.height)
+		{	
 			return lastMap;
 		}
-		
 	}
 	lastMap = $(activeMaps).filter(function(index) {
 		
-		var lowerX = this.left;
-		var upperX = this.left +  this.width;
-
-		var lowerY = this.top;
-		var upperY = this.top +  this.height;
-		
-		if(lowerX < x && x < upperX && lowerY < y && y < upperY)
-			return true;
-		return false;
+		return (this.left < x && x < this.left +  this.width && this.top < y && y < this.top +  this.height)
 	})[0];
 	return lastMap;
 	
@@ -570,10 +558,11 @@ $(function() {
 	map=new Map($('#comic'));
 	initMapPos = [Math.floor(map.position()[0]), Math.floor(map.position()[1])];
 	player = new Player();
-	update();
-	//camera position in comic
 	camx = 100.0;
 	camy = 40.0;
+	updateMap();
+	//camera position in comic
+
 	
 	$("#canvascontainer").hide();
 	
