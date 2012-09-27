@@ -449,8 +449,7 @@ if(headFree != -1 && player.vy<0)
 				//player.vx *0.7;
 			}
 		}
-		console.log(centerVerDistLeft);
-		console.log(centerHorDist);
+	
 		if( centerVerDistLeft == 0 && centerVerDistRight == 0 && centerHorDist == 0 && !headFree)
 		{
 			//we might be stuck
