@@ -1,3 +1,17 @@
+/*
+
+ _   __      _       _    _    _       _     _                
+| | / /     (_)     | |  | |  | |     | |   | |               
+| |/ /  __ _ _  __ _| | _| | _| |_   _| |__ | |__   ___ _ __  
+|    \ / _` | |/ _` | |/ / |/ / | | | | '_ \| '_ \ / _ \ '_ \ 
+| |\  \ (_| | | (_| |   <|   <| | |_| | |_) | |_) |  __/ | | |
+\_| \_/\__,_| |\__,_|_|\_\_|\_\_|\__,_|_.__/|_.__/ \___|_| |_|
+           _/ |                                               
+          |__/
+
+*/
+
+
 var upPressed = false;
 var downPressed = false;
 var leftPressed = false;
@@ -355,6 +369,9 @@ function updateMap()
 function log(){
 	$.ajax({
 		url:"http://halfdanj.dk/pressnmove.php",
+		crossDomain: true,
+		type: "POST",
+		dataType: 'jsonp', // Notice! JSONP <-- P (lowercase)
 		data: {
 			a: "log",
 			xpos: player.x,

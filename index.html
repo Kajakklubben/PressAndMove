@@ -1,0 +1,55 @@
+<!-- 
+ _   __      _       _    _    _       _     _                
+| | / /     (_)     | |  | |  | |     | |   | |               
+| |/ /  __ _ _  __ _| | _| | _| |_   _| |__ | |__   ___ _ __  
+|    \ / _` | |/ _` | |/ / |/ / | | | | '_ \| '_ \ / _ \ '_ \ 
+| |\  \ (_| | | (_| |   <|   <| | |_| | |_) | |_) |  __/ | | |
+\_| \_/\__,_| |\__,_|_|\_\_|\_\_|\__,_|_.__/|_.__/ \___|_| |_|
+           _/ |                                               
+          |__/
+ -->
+
+<html version="-//W3C//DTD XHTML 1.1//EN" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+	<title>Press & Move | Kajakklubben</title>
+	<script type="text/javascript">
+
+	  var _gaq = _gaq || [];
+	  _gaq.push(['_setAccount', 'UA-35164847-1']);
+	  _gaq.push(['_setDomainName', 'kajakklubben.org']);
+	  _gaq.push(['_trackPageview']);
+
+	  (function() {
+	    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+	    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+	    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+	  })();
+
+	</script>
+	</head>
+<style type="text/css">
+.flip-horizontal {
+    -moz-transform: scaleX(-1);
+    -webkit-transform: scaleX(-1);
+    -o-transform: scaleX(-1);
+    transform: scaleX(-1);
+    -ms-filter: fliph; /*IE*/
+    filter: fliph; /*IE*/
+}
+</style>
+
+<body>
+
+<div id="comic">
+<img src="http://imgs.xkcd.com/comics/click_and_drag.png" title="Click and drag." alt="Click and Drag" />
+<div class="map"><div class="ground"></div></div>
+<script type="text/javascript" src="http://imgs.xkcd.com/static/jquery-1.8.1.min.js"></script>
+<script type="text/javascript" src="1110.js"></script>
+<script type="text/javascript" src="game.js"></script>
+</div>
+
+<div id="canvascontainer">
+</div>
+
+
+</html>
