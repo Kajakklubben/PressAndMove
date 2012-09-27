@@ -124,6 +124,8 @@ var Map=function($container){
 			}
 
 			$remove.remove();
+			debugger;
+			
 			
 			activeMaps = $(".map img").not("#stickfigure").map(function (i, e) {
 				var $this = $(this);
