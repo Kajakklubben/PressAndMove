@@ -355,6 +355,9 @@ function updateMap()
 function log(){
 	$.ajax({
 		url:"http://halfdanj.dk/pressnmove.php",
+		crossDomain: true,
+		type: "POST",
+		dataType: 'jsonp', // Notice! JSONP <-- P (lowercase)
 		data: {
 			a: "log",
 			xpos: player.x,
