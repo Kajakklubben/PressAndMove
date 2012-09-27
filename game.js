@@ -537,15 +537,16 @@ function getImageForPixel(x, y) {
 	
 	if(lastMap != undefined)
 	{
-		if(lastMap.left < x && x < lastMap.left +  lastMap.width && lastMap.top < y && y < lastMap.top +  lastMap.height)
+		if(lastMap.left <= x && x < lastMap.left +  lastMap.width && lastMap.top <= y && y < lastMap.top +  lastMap.height)
 		{	
 			return lastMap;
 		}
 	}
 	lastMap = $(activeMaps).filter(function(index) {
 		
-		return (this.left < x && x < this.left +  this.width && this.top < y && y < this.top +  this.height)
+		return (this.left <= x && x < this.left +  this.width && this.top <= y && y < this.top +  this.height)
 	})[0];
+	//ERROR HERE! lastMap is sometimes undefined
 	return lastMap;
 	
 
