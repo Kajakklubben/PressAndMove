@@ -109,7 +109,7 @@ var Map=function($container){
 							$("#canvascontainer").append(canvas);
 							var context = document.getElementById(nm).getContext('2d');
 							context.drawImage(this, 0, 0);
-							collisionMap[nm] = context;
+							collisionMap[nm] = context.getImageData(0, 0, 2048, 2048).data;
 						}}(name)).error(function (nm) { return function() {
 							if(!this.errorset) {
 								$(this).attr('src', 'imgs/'+nm+'.png');
