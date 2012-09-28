@@ -99,7 +99,7 @@ document.onkeypress = function(event) {
 	}
 	
 	if(event.which == 105) {
-		var s = prompt("Teleport: Where do you want to go (0-9)?: "+player.x+" > "+player.y);
+		var s = prompt("Teleport: Where do you want to go (0-9)?: ");
 		
 		switch(s)
 		{
@@ -107,10 +107,10 @@ document.onkeypress = function(event) {
 				teleport(8879,35460); // ufo
 			break;
 			case '1':
-				teleport(26033,120); // ship under bridge
+				teleport(26033,1050); // ship under bridge
 			break;
 			case '2':
-				teleport(53691,-11750); // huge tower
+				teleport(53671,-11750); // huge tower
 			break;
 			case '3':
 				teleport(3529,-17703); // flying rocket
@@ -200,7 +200,7 @@ function Player() {
 		else
 			player.vx = 0;
 			
-		this.inWater = materialAtPixel(player.centerX(), player.centerY()+10) == col_water;
+		this.inWater = materialAtPixel(player.centerX(), player.centerY()+5) == col_water;
 			
 		var currentClimbable = materialAtPixel(player.centerX(), player.centerY()) == col_climbable;
 		if(upPressed) {
@@ -387,7 +387,8 @@ if(headFree != -1 && player.vy<0)
 	
 	
 	if(player.inWater) {
-		player.vy -= 0.5;
+		
+		player.vy -= 1.5;
 		if(player.vy < -4)
 			player.vy = -4;
 	}
@@ -564,8 +565,8 @@ $(function() {
 	map=new Map($('#comic'));
 	initMapPos = [Math.floor(map.position()[0]), Math.floor(map.position()[1])];
 	player = new Player();
-	camx = 100.0;
-	camy = 40.0;
+	camx = 0.0;
+	camy = 0.0;
 	updateMap();
 	//camera position in comic
 
