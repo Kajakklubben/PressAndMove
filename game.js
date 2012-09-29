@@ -206,12 +206,7 @@ function Player() {
 	var factor = 1.0;
 	var maxFactor = 1.0;	
 	
-	this.rotate = function() {
-		this.player.css("-ms-transform", "rotate(120deg)");
-		this.player.css("-o-transform", "rotate(120deg)");
-		this.player.css("-webkit-transform", "rotate(120deg");
-		this.player.css("-moz-transform", "rotate(120deg)");
-	}
+	
 	
 	this.centerX = function() {
 		return player.player.position().left+player.player.width()/2.0;
@@ -273,7 +268,7 @@ function Player() {
 				
 			}
 
-			if(currentClimbable) {
+			if(currentClimbable && !balloon) {
 					player.vy = -2;
 					this.climbing = true;
 					if(climbDistStop != -1)
@@ -303,6 +298,8 @@ function Player() {
 		
 		if(balloon)
 		{
+			this.climbing = false;
+			
 			if(player.vy>-6)
 				player.vy += -2.0;
 		}
@@ -382,7 +379,7 @@ function Player() {
 			c += "flip"
 		}
 		
-		if(balloon) {
+		/*if(balloon) {
 			var v= Math.abs(player.vx);
 			if(0 < v && v < 3) {
 				c+= "r5";
@@ -391,7 +388,7 @@ function Player() {
 				c+= "r10";
 			}
 
-		}
+		}*/
 		
 		this.player.attr("class", c);
 
