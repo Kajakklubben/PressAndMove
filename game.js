@@ -95,7 +95,7 @@ document.onkeypress = function(event) {
 	}
 	
 	if(event.which == 106) {
-		alert(getImageForPixel(player.centerX(), player.centerY()).id);
+		alert(getImageForPixel(player.centerX(), player.centerY()).id + "\n" + player.centerX() + "," + player.centerY());
 	}
 	
 	if(event.which == 105) {
