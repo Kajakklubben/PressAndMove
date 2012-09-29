@@ -336,9 +336,73 @@ function Player() {
 
 		animation = ani;
 	}
+	
 	var landEnd = false;
+	var landing = false;
+	
 	this.animate = function() {
-		if(animation == "land" && frame < 5 && !landEnd) {
+		
+		if(player.climbing) 
+		{
+			if(upPressed || downPressed || rightPressed || leftPressed) 
+			{
+				this.animateFrame("climb", 9, true, 2);
+			}
+		}
+		else if(isGrounded)
+		{
+			//ground			
+			if(!wasGrounded && lastVY > 19)
+			{
+				landing = true;
+			}		
+							
+			if(landing)
+			{
+				if(frame == 3)
+					landing = false;
+					
+				this.animateFrame("fast_land", 4, false, 4);				
+			}			
+			else if(leftPressed || rightPressed) 
+			{
+				//Run
+				this.animateFrame("run", 8, true, 2);
+			}
+			else
+			{
+				//Idle
+				this.animateFrame("idle", 15, true, 2);
+			}
+		}
+		else
+		{
+			//air
+			if(balloon)
+			{
+				this.animateFrame("air", 1, true, 2);
+			}
+			else
+			{
+				if(player.vy < 0 && animation != "air") {
+					this.animateFrame("jump", 2, false, 3);
+				}
+				else if(player.vy > 3)
+				{
+					if(player.vy > 19)
+					{
+						this.animateFrame("fast_fall", 1, false, 2);
+					}
+					else
+					{
+						this.animateFrame("fall", 1, false, 2);
+					}
+					fallSpeed = player.vy;
+				}				
+			}
+		}		
+		
+		/*if(animation == "land" && frame < 5 && !landEnd) {
 			if(frame==4)
 				landEnd = true;
 			this.animateFrame("land", 5, true, 3);
@@ -366,7 +430,7 @@ function Player() {
 		}
 		else if(player.vy==0 && isGrounded) {
 			this.animateFrame("idle", 15, true, 2);
-		}
+		}*/
 
 		var ani = "player\\man_" + animation +  "_" + pad(1+frame, 2) + ".png";
 
@@ -376,7 +440,7 @@ function Player() {
 
 		var c = "";
 		if(this.flipped) {
-			c += "flip"
+			c += "flip";
 		}
 
 		/*if(balloon) {
