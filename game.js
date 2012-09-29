@@ -358,7 +358,7 @@ function Player() {
 				this.animateFrame("climb", 9, true, 2);
 			}
 		}
-		else if(player.inWater)
+		else if(player.feetIinWater)
 		{
 			//Water
 			this.animateFrame("climb", 9, true, 2);
