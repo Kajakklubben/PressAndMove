@@ -172,7 +172,8 @@ function Player() {
 	var justJumped = true;
 	
 	var cnt = 0;
-	
+	var factor = 1.0;
+	var maxFactor = 1.0;	
 	
 	
 	this.centerX = function() {
@@ -183,30 +184,48 @@ function Player() {
 		return player.player.position().top + player.player.height()/2.0;
 	}	
 	this.update = function () {
-		var factor = 1;
+		this.factor = 0.6;
+		this.maxFactor = 0.6;
 		if(debugSpeed) {
-			factor = 10;
+			this.factor = 10;
+			this.maxFactor = 10;
+		}	
+		
+		if(this.balloon)
+			this.climbing = false;
+			
+		if(this.climbing)
+		{
+			this.factor = 0.5;
+			this.maxFactor = 0.4;
 		}
+			
 		if(!isGrounded)
-			factor = 0.7;
+			this.factor = 0.7;
+		
+		
 			
 		if(leftPressed) {
-			if(player.vx>-7)
-				player.vx -=2*factor;
+			if(player.vx>-7*this.maxFactor)
+				player.vx -=2*this.factor;
 			
 			lastPressed = "left";
 		}
 		else if(rightPressed) {
-			if(player.vx<7)
-				player.vx +=2*factor;
+			if(player.vx<7*this.maxFactor)
+				player.vx +=2*this.factor;
 			lastPressed = "right";
 		}
 		else
 			player.vx = 0;
+		
+
 			
 		this.inWater = materialAtPixel(player.centerX(), player.centerY()+5) == col_water;
-			
-		var currentClimbable = materialAtPixel(player.centerX(), player.centerY()) == col_climbable;
+		
+		var climbDist = PlayerRaytrace(0,0,0,-1,5,false,col_climbable);
+		var climbDistStop = PlayerRaytrace(0,-5,0,-1,5,true,col_climbable);
+		var currentClimbable  = climbDist != -1;
 		if(upPressed) {
 			if(isGrounded && !this.climbing && headFree && upPressedNow) {
 				justJumped = true;
@@ -218,6 +237,10 @@ function Player() {
 			if(currentClimbable) {
 					player.vy = -2;
 					this.climbing = true;
+					if(climbDistStop != -1)
+					{
+						player.vy = 0;
+					}
 			}
 			else
 				this.climbing = false;
@@ -242,7 +265,7 @@ function Player() {
 		if(balloon)
 		{
 			if(player.vy>-6)
-				player.vy += -1.2;
+				player.vy += -2.0;
 		}
 		
 		if(lastPressed != "right" && !this.climbing) {
@@ -423,19 +446,21 @@ if(headFree != -1 && player.vy<0)
 		
 	}
 	
-	var centerVerDistLeft = PlayerRaytrace(-2,dirY*playerHeight/2,0,dirY,Math.abs(player.vy));
-	var centerVerDistRight = PlayerRaytrace(2,dirY*playerHeight/2,0,dirY,Math.abs(player.vy));
+	var centerVerDistLeft = PlayerRaytrace(-2,dirY*playerHeight/2,0,dirY,1+Math.abs(player.vy));
+	var centerVerDistRight = PlayerRaytrace(2,dirY*playerHeight/2,0,dirY,1+Math.abs(player.vy));
 	
 	if(centerVerDistLeft != -1 && centerVerDistRight == -1)
 	{
-		player.vx *0.7;
-		player.vx +=2;
+		player.vy *=0.7;
+		if(player.vx<7*this.maxFactor)
+			player.vx +=2;
 		
 	}
 	if(centerVerDistLeft == -1 && centerVerDistRight != -1)
 	{
-		player.vx *0.7;
-		player.vx -=2;
+		player.vy *=0.7;
+		if(player.vx<-7*this.maxFactor)
+			player.vx -=2;
 		
 	}
 		
@@ -481,11 +506,13 @@ if(headFree != -1 && player.vy<0)
 	}
 
 }
-function PlayerRaytrace(xoffset,yoffset,dx,dy,dist,flip) {
+function PlayerRaytrace(xoffset,yoffset,dx,dy,dist,flip,compare) {
 	
 	dist = Math.max(1,dist);
 	if(flip == undefined)
 		flip = false;
+	if(compare == undefined)
+		compare = col_ground;
 		
 	var x = player.centerX()+xoffset;
 	var y = player.centerY()+yoffset;
@@ -497,7 +524,7 @@ function PlayerRaytrace(xoffset,yoffset,dx,dy,dist,flip) {
 	var ground = false;
 	for(i = 0;i<dist;)
 	{
-		ground = materialAtPixel(x+i*dx, y+i*dy) == col_ground;
+		ground = materialAtPixel(x+i*dx, y+i*dy) == compare;
 		if((!flip && ground) || (flip && !ground))
 			return i;
 		//we always want to trace the first  pixels due to better walking
