@@ -135,7 +135,7 @@ document.onkeypress = function(event) {
 	}
 
 	if(event.which == 106 && event.shiftKey) {
-		alert(getImageForPixel(player.centerX(), player.centerY()).id + "\n" + player.centerX() + "," + player.centerY());
+		alert(getImageForPixel(player.centerX(), player.centerY()).id + "\n" + player.centerX() + "," + player.centerY()+"\n game:" + player.x + "," + player.y);
 	}
 
 	if(event.which == 84 && event.shiftKey) {
