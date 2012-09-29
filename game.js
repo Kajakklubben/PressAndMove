@@ -352,7 +352,7 @@ function updateMap()
 	offset = player.player.offsetParent().offsetParent().offset();
 	offset.left += player.player.offsetParent().offsetParent().width()/2-20;
 	offset.top +=player.player.offsetParent().offsetParent().height()/2+130;
-	console.log(offset);
+
 	//player.player.offset({left: 650, top: 400});
 	player.player.offset({left: offset.left+(player.x-camx), top: offset.top+(player.y-camy)});
 
