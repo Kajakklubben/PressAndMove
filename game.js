@@ -95,24 +95,7 @@ document.onkeypress = function(event) {
 	}
 	
 	if(event.which == 106) {
-		var s = prompt("Where do you wanna go?");
-
-		var grp = (/(\d*)(n|s)(\d*)(w|e)/).exec(s);
-		var x = 0;
-		var y = 0;
-		
-		if(grp[4] == "w")
-			x = -parseInt(grp[3]);
-		else if(grp[4] == "e")
-			x = parseInt(grp[3]);
-
-		if(grp[2] == "n")
-			y = -parseInt(grp[1]);
-		else if(grp[2] == "s")
-			y = parseInt(grp[1])-1;
-			
-		player.x = x*2048;
-		player.y = y*2048;
+		alert(getImageForPixel(player.centerX(), player.centerY()).id);
 	}
 	
 	if(event.which == 105) {

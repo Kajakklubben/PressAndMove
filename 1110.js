@@ -100,7 +100,13 @@ var Map=function($container){
 				if(tile.length)
 					$remove=$remove.not(tile);
 				else {
-					$image=$('<img data-name="' + name + '" class="tile'+name+'" src="imgs/'+name+'.png" style="top:'+((centre[1]+y)*tilesize)+'px;left:'+((centre[0]+x)*tilesize)+'px; z-index: -1; position: absolute;;" style="display:none" />');
+					var src;
+					if(name == '1n1e')
+						src = 'imgs/' + name + '.png';
+					else
+						src = 'http://imgs.xkcd.com/clickdrag/' + name + '.png';
+						
+					$image=$('<img data-name="' + name + '" class="tile'+name+'" src="' + src + '" style="top:'+((centre[1]+y)*tilesize)+'px;left:'+((centre[0]+x)*tilesize)+'px; z-index: -1; position: absolute;;" style="display:none" />');
 
 					$image.load(function(){$(this).show()}).error(function(){$(this).remove();});
 					$map.append($image);
