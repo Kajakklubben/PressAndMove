@@ -127,11 +127,11 @@ document.onkeypress = function(event) {
 	if(event.which == 32) {
 	}
 	
-	if(event.which == 106) {
+	if(event.which == 106 && event.shiftKey) {
 		alert(getImageForPixel(player.centerX(), player.centerY()).id + "\n" + player.centerX() + "," + player.centerY());
 	}
 	
-	if(event.which == 105) {
+	if(event.which == 84 && event.shiftKey) {
 		var s = prompt("Teleport: Where do you want to go (0-9)?: ");
 		
 		switch(s)
