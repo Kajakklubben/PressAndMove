@@ -537,7 +537,7 @@ function materialAtImagePixel(name, x, y) {
 		return col_air; 
 		
 	var data = collisionMap[name];
-	var i = (Math.floor(y) * 4) * 2048 + (Math.floor(x) * 4);	
+	var i = (Math.floor(y/2) * 4) * 1024 + (Math.floor(x/2) * 4);	
 
 	if(data[i+0] <  50 && data[i+1] < 50 && data[i+2] < 50)
 		return col_ground;
