@@ -169,8 +169,8 @@ function Player() {
 	this.map.append('<img src="player/man_air_01.png" style="position: relative; z-index: 20" id="stickfigure">');
 	this.player = $("#stickfigure", this.map);
 	
-	this.x = -330;
-	this.y = -112;
+	this.x = 0;
+	this.y = 0;
 	
 	this.vx = 0;
 	this.vy = 0;
@@ -366,8 +366,12 @@ function updateMap()
 	
 	map.update();
 	
+	offset = player.player.offsetParent().offsetParent().offset();
+	offset.left += player.player.offsetParent().offsetParent().width()/2-10;
+	offset.top +=player.player.offsetParent().offsetParent().height()/2-10;
+	console.log(offset);
 	//player.player.offset({left: 650, top: 400});
-	player.player.offset({left: 650+(player.x-camx), top: 400+(player.y-camy)});
+	player.player.offset({left: offset.left+(player.x-camx), top: offset.top+(player.y-camy)});
 
 }
 
@@ -582,10 +586,12 @@ $(function() {
 	map=new Map($('#comic'));
 	initMapPos = [Math.floor(map.position()[0]), Math.floor(map.position()[1])];
 	player = new Player();
+	//player position in original comic
+	player.x = -305;
+	player.y =-56;
 	camx = 0.0;
 	camy = 0.0;
 	updateMap();
-	//camera position in comic
 
 	
 	$("#canvascontainer").hide();
