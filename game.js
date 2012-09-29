@@ -123,6 +123,13 @@ function teleport(x,y)
 
 gameStarted = false;
 gameIntro = false;
+
+document.onmousedown = function(event){
+	if(!gameIntro)
+		StartIntro();
+	
+}
+
 document.onkeypress = function(event) {
 	if(event.which == 32) {
 	}
