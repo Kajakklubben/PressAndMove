@@ -1,4 +1,6 @@
 
+var colissionDelayTimer;
+
 function eventPos(e) {
 	if(e.type.match(/^touch/)) {
 		e = e.originalEvent.changedTouches[0];
@@ -87,6 +89,8 @@ var Map=function($container){
 		};
 
 		if(centre[0]!=centre_last[0]||centre[1]!=centre_last[1]){
+		
+			colissionDelayTimer = 0;
 			var $remove=$map.children().not('.ground').not('#stickfigure');
 
 			for(var y=-1;y<=+1;y++)
@@ -101,29 +105,34 @@ var Map=function($container){
 					$image.load(function(){$(this).show()}).error(function(){$(this).remove();});
 					$map.append($image);
 					if($("#canvascontainer #" + name).length == 0) {
-						var colImg = $(new Image());
-						colImg.attr('src', 'imgs/'+name+'C.png')
-						colImg.load(function(nm) { return function() {
-							canvas = "<canvas id='"+nm+"' width='2048' height='2048'></canvas>";
-							
-							$("#canvascontainer").append(canvas);
-							var context = document.getElementById(nm).getContext('2d');
-							context.drawImage(this, 0, 0);
-							collisionMap[nm] = context.getImageData(0, 0, 2048, 2048).data;
-						}}(name)).error(function (nm) { return function() {
-							if(!this.errorset) {
-								$(this).attr('src', 'imgs/'+nm+'.png');
-								this.errorset = true;
-							}
-							
-						}}(name));
+						window.setTimeout(function (nm) { return function() {
+							var colImg = $(new Image());
+
+							colImg.load(function() {
+								var context = document.getElementById('canvas').getContext('2d');
+								context.drawImage(this, 0, 0);
+								collisionMap[nm] = context.getImageData(0, 0, 2048, 2048).data;
+							}).error(function (e) {
+								if(!this.errorset) {
+									$(this).attr('src', 'imgs/'+nm+'.png');
+									this.errorset = true;
+								}
+								
+							});
+							colImg.attr('src', '/imgs/'+nm+'C.png')
+						}}(name), (++colissionDelayTimer)*500);
 					}
 					
 					
 				}
 			}
-
+			
+			for(var i = 0;i < $remove.length;i++) {
+				collisionMap[$($remove[0]).data("name")] = undefined;
+			}
+			
 			$remove.remove();
+			
 			
 			activeMaps = $(".map img").not("#stickfigure").map(function (i, e) {
 				var $this = $(this);
