@@ -489,21 +489,27 @@ if(headFree != -1 && player.vy<0)
 		
 	}
 	
+	
+	
 	var centerVerDistLeft = PlayerRaytrace(-2,dirY*playerHeight/2,0,dirY,1+Math.abs(player.vy));
 	var centerVerDistRight = PlayerRaytrace(2,dirY*playerHeight/2,0,dirY,1+Math.abs(player.vy));
 	
+	//Slide on edges
 	if(centerVerDistLeft != -1 && centerVerDistRight == -1)
 	{
 		player.vy *=0.7;
-		if(player.vx<7*this.maxFactor)
+		if(player.vx<7*player.maxFactor)
 			player.vx +=2;
+		
+			
 		
 	}
 	if(centerVerDistLeft == -1 && centerVerDistRight != -1)
 	{
 		player.vy *=0.7;
-		if(player.vx<-7*this.maxFactor)
+		if(player.vx>-7*player.maxFactor)
 			player.vx -=2;
+			
 		
 	}
 		
