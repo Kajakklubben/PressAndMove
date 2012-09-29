@@ -408,36 +408,6 @@ function Player() {
 			}
 		}		
 		
-		/*if(animation == "land" && frame < 5 && !landEnd) {
-			if(frame==4)
-				landEnd = true;
-			this.animateFrame("land", 5, true, 3);
-		}
-		else if(balloon) {
-			this.animateFrame("air", 1, true, 2);
-		}
-		else if(isGrounded && !wasGrounded && lastVY > 15) {
-			landEnd = false;
-			this.animateFrame("land", 5, true, 3);
-		}
-		else if(player.climbing) {
-			if(upPressed || downPressed || rightPressed || leftPressed) {
-				this.animateFrame("climb", 9, true, 2);
-			}
-		}
-		else if(player.vy < 0) {
-			this.animateFrame("jump", 2, false, 2);
-		}
-		else if(player.vy > 8) {
-			this.animateFrame("fall", 2, false, 2);
-		}
-		else if(leftPressed || rightPressed) {
-			this.animateFrame("run", 8, true, 2);
-		}
-		else if(player.vy==0 && isGrounded) {
-			this.animateFrame("idle", 15, true, 2);
-		}*/
-
 		var ani = "player\\man_" + animation +  "_" + pad(1+frame, 2) + ".png";
 
 		this.player.attr("src", ani)
@@ -448,17 +418,6 @@ function Player() {
 		if(this.flipped) {
 			c += "flip";
 		}
-
-		/*if(balloon) {
-			var v= Math.abs(player.vx);
-			if(0 < v && v < 3) {
-				c+= "r5";
-			}
-			else if(3 < v) {
-				c+= "r10";
-			}
-
-		}*/
 
 		this.player.attr("class", c);
 
