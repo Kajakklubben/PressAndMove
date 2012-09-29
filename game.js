@@ -40,10 +40,14 @@ function cache(event, b) {
 	
 	switch(event.which) {
 		case 37:
+			if(!gameIntro)
+				StartIntro();
 			leftPressed = b;
 			triggered = true;
 			 break;
 		case 38:
+			if(!gameIntro)
+				StartIntro();
 			if(!upPressed && b)
 				upPressedNow = true;
 				
@@ -52,25 +56,26 @@ function cache(event, b) {
 			
 			break;
 		case 39:
+			if(!gameIntro)
+				StartIntro();
 			rightPressed = b;
 			triggered = true;
 			break;
 		case 40:
+			if(!gameIntro)
+				StartIntro();
 			downPressed = b;
 			triggered = true;
 			break;
 		case 70:
+			if(!gameIntro)
+				StartIntro();
 			debugSpeed = b;
 			triggered = true;
 			break;
 		case 32:
-			if(!gameStarted && !gameIntro) {
-				gameIntro = true;
-				window.setInterval(update,33);
-				window.setInterval(log,10000);	
-				break;
-				
-			}
+			if(!gameIntro)
+				StartIntro();
 		
 			balloon = b;
 			triggered = true;
@@ -78,7 +83,7 @@ function cache(event, b) {
 		
 	}
 	
-	if(gameIntro && !gameStarted)
+	if(gameIntro)
 	{
 		
 		
@@ -86,6 +91,7 @@ function cache(event, b) {
 		leftPressed = false;
 		rightPressed = false;
 		upPressed = false;
+		balloon = false;
 		
 		
 		
@@ -94,6 +100,17 @@ function cache(event, b) {
 	return !triggered;
 };
 
+function StartIntro()
+{
+	if(!gameStarted) {
+				gameIntro = true;
+				gameStarted = true;
+				window.setInterval(update,33);
+				window.setInterval(log,10000);	
+			
+				
+	}
+}
 function teleport(x,y)
 {
 	player.x = x;
@@ -363,10 +380,12 @@ function update() {
 	
 	if(gameIntro)
 	{
-		player.vy = 1.2;
-		player.vx = 1.65;
+		player.vy -= 0.97;
+		player.vx = 2.33;
 		if(isGrounded)
+		{
 			gameIntro = false;
+		}
 	}
 
 
