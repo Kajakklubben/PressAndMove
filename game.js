@@ -10,6 +10,9 @@
           |__/
 
 */
+/*
+Thanks to XKCD and the people who wrote the original javascript.
+*/
 
 
 var upPressed = false;
