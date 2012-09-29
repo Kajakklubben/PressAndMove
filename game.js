@@ -570,8 +570,6 @@ function getImageForPixel(x, y) {
 		return (this.left <= x && x < this.left +  this.width && this.top <= y && y < this.top +  this.height)
 	})[0];
 	
-	
-	//ERROR HERE! lastMap is sometimes undefined
 	return lastMap;
 	
 
