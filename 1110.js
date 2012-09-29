@@ -111,15 +111,9 @@ var Map=function($container){
 							colImg.load(function() {
 								var context = document.getElementById('canvas').getContext('2d');
 								context.drawImage(this, 0, 0);
-								collisionMap[nm] = context.getImageData(0, 0, 2048, 2048).data;
-							}).error(function (e) {
-								if(!this.errorset) {
-									$(this).attr('src', 'imgs/'+nm+'.png');
-									this.errorset = true;
-								}
-								
-							});
-							colImg.attr('src', '/imgs/'+nm+'C.png')
+								collisionMap[nm] = context.getImageData(0, 0, 1024, 1024).data;
+							})
+							colImg.attr('src', '/collision/'+nm+'C.png')
 						}}(name), (++colissionDelayTimer)*500);
 					}
 					
