@@ -66,9 +66,13 @@ function cache(event, b) {
 		case 32:
 			if(!gameStarted) {
 				gameStarted = true;
-				player.vy = -10;
+				player.vy = -7;
+				player.vx = 7;
+				rightPressed = true;
 				window.setInterval(update,33);
 				window.setInterval(log,10000);
+				break;
+				
 			}
 		
 			balloon = b;
@@ -95,7 +99,7 @@ document.onkeypress = function(event) {
 	}
 	
 	if(event.which == 106) {
-		alert(getImageForPixel(player.centerX(), player.centerY()).id);
+		alert(getImageForPixel(player.centerX(), player.centerY()).id + "\n" + player.centerX() + "," + player.centerY());
 	}
 	
 	if(event.which == 105) {
