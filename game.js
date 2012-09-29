@@ -68,10 +68,11 @@ function cache(event, b) {
 			triggered = true;
 			break;
 		case 70:
-			if(!gameIntro)
-				StartIntro();
-			debugSpeed = b;
-			triggered = true;
+			if(event.shiftKey)
+			{
+				debugSpeed = b;
+				triggered = true;
+			}
 			break;
 		case 32:
 			if(!gameIntro)
@@ -131,14 +132,12 @@ document.onmousedown = function(event){
 }
 
 document.onkeypress = function(event) {
-	if(event.which == 32) {
+
+	if(event.which == 89 && event.shiftKey) {
+		alert(getImageForPixel(player.centerX(), player.centerY()).id + "\n" + player.centerX() + "," + player.centerY()+"\n game:" + player.x + "," + player.y);
 	}
 
-	if(event.which == 106) {
-		alert(getImageForPixel(player.centerX(), player.centerY()).id + "\n" + player.centerX() + "," + player.centerY());
-	}
-
-	if(event.which == 105) {
+	if(event.which == 84 && event.shiftKey) {
 		var s = prompt("Teleport: Where do you want to go (0-9)?: ");
 
 		switch(s)
@@ -226,8 +225,8 @@ function Player() {
 		this.factor = 0.6;
 		this.maxFactor = 0.6;
 		if(debugSpeed) {
-			this.factor = 10;
-			this.maxFactor = 10;
+			this.factor = 4;
+			this.maxFactor = 4;
 		}	
 
 		if(this.balloon)
@@ -351,14 +350,20 @@ function Player() {
 		
 		if(player.climbing) 
 		{
+			//Climbing
 			if(upPressed || downPressed || rightPressed || leftPressed) 
 			{
 				this.animateFrame("climb", 9, true, 2);
 			}
 		}
+		else if(player.inWater)
+		{
+			//Water
+			this.animateFrame("climb", 9, true, 2);
+		}
 		else if(isGrounded)
 		{
-			//ground			
+			//Ground			
 			if(!wasGrounded && lastVY > 19)
 			{
 				landing = true;
@@ -384,7 +389,7 @@ function Player() {
 		}
 		else
 		{
-			//air
+			//Air
 			if(balloon)
 			{
 				this.animateFrame("air", 1, true, 2);
@@ -478,8 +483,8 @@ function update() {
 
 	if(gameIntro)
 	{
-		player.vy -= 0.97;
-		player.vx = 2.33;
+		player.vy -= 0.971;
+		player.vx = 2.13;
 		if(isGrounded)
 		{
 			gameIntro = false;
@@ -518,7 +523,7 @@ function updateMap()
 	map.update();
 
 	offset = player.player.offsetParent().offsetParent().offset();
-	offset.left += player.player.offsetParent().offsetParent().width()/2-20;
+	offset.left += player.player.offsetParent().offsetParent().width()/2-35;
 	offset.top +=player.player.offsetParent().offsetParent().height()/2+160;
 
 	//player.player.offset({left: 650, top: 400});
@@ -748,8 +753,8 @@ $(function() {
 	initMapPos = [Math.floor(map.position()[0]), Math.floor(map.position()[1])];
 	player = new Player();
 	//player position in original comic
-	player.x = -305+20;
-	player.y =-56-130;
+	player.x = -305+25;
+	player.y =-56-170;
 	camx = 0.0;
 	camy = 0.0;
 	updateMap();
