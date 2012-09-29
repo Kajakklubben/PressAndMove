@@ -201,6 +201,7 @@ function Player() {
 
 	this.climbing = false;
 	this.inWater = false;
+	this.feetIinWater = false;
 
 	var lastPressed = "right";
 
@@ -262,6 +263,7 @@ function Player() {
 
 
 		this.inWater = materialAtPixel(player.centerX(), player.centerY()+5) == col_water;
+		this.feetIinWater = materialAtPixel(player.centerX(), player.centerY()+15) == col_water;
 
 		var climbDist = PlayerRaytrace(0,0,0,-1,5,false,col_climbable);
 		var climbDistStop = PlayerRaytrace(0,-5,0,-1,5,true,col_climbable);
