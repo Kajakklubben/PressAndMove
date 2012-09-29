@@ -350,14 +350,20 @@ function Player() {
 		
 		if(player.climbing) 
 		{
+			//Climbing
 			if(upPressed || downPressed || rightPressed || leftPressed) 
 			{
 				this.animateFrame("climb", 9, true, 2);
 			}
 		}
+		else if(player.inWater)
+		{
+			//Water
+			this.animateFrame("climb", 9, true, 2);
+		}
 		else if(isGrounded)
 		{
-			//ground			
+			//Ground			
 			if(!wasGrounded && lastVY > 19)
 			{
 				landing = true;
@@ -383,7 +389,7 @@ function Player() {
 		}
 		else
 		{
-			//air
+			//Air
 			if(balloon)
 			{
 				this.animateFrame("air", 1, true, 2);
