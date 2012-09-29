@@ -162,6 +162,8 @@ function Player() {
 	this.vx = 0;
 	this.vy = 0;
 	
+	this.flipped;
+	
 	this.climbing = false;
 	this.inWater = false;
 	
@@ -175,6 +177,12 @@ function Player() {
 	var factor = 1.0;
 	var maxFactor = 1.0;	
 	
+	this.rotate = function() {
+		this.player.css("-ms-transform", "rotate(120deg)");
+		this.player.css("-o-transform", "rotate(120deg)");
+		this.player.css("-webkit-transform", "rotate(120deg");
+		this.player.css("-moz-transform", "rotate(120deg)");
+	}
 	
 	this.centerX = function() {
 		return player.player.position().left+player.player.width()/2.0;
@@ -269,10 +277,10 @@ function Player() {
 		}
 		
 		if(lastPressed != "right" && !this.climbing) {
-			this.player.addClass("flip-horizontal");
+			this.flipped = true;
 		}
 		else {
-			this.player.removeClass("flip-horizontal");
+			this.flipped = false;
 		}
 		
 		upPressedNow = false;
@@ -336,6 +344,26 @@ function Player() {
 		
 		this.player.attr("src", ani)
 		
+		this.player.removeClass(function () { return false; });
+		
+		var c = "";
+		if(this.flipped) {
+			c += "flip"
+		}
+		
+		if(balloon) {
+			var v= Math.abs(player.vx);
+			if(0 < v && v < 3) {
+				c+= "r5";
+			}
+			else if(3 < v) {
+				c+= "r10";
+			}
+
+		}
+		
+		this.player.attr("class", c);
+
 	}
 }
 var camx = 100.0;

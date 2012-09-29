@@ -31,7 +31,7 @@ Thanks to XKCD and the people who wrote the original javascript.
 	</script>
 	</head>
 <style type="text/css">
-.flip-horizontal {
+.flip {
     -moz-transform: scaleX(-1);
     -webkit-transform: scaleX(-1);
     -o-transform: scaleX(-1);
@@ -40,6 +40,33 @@ Thanks to XKCD and the people who wrote the original javascript.
     filter: fliph; /*IE*/
 }
 
+.r5 {
+	-ms-transform:rotate(5deg);
+	-o-transform:rotate(5deg);
+	-webkit-transform:rotate(5deg);
+	-moz-transform:rotate(5deg);
+}
+
+.r10 {
+	-ms-transform:rotate(10deg);
+	-o-transform:rotate(10deg);
+	-webkit-transform:rotate(10deg);
+	-moz-transform:rotate(10deg);
+}
+
+.flip-r5 {
+	-ms-transform:rotate(5deg);
+	-o-transform:rotate(5deg);
+	-webkit-transform:scaleX(-1) rotate(5deg);
+	-moz-transform:rotate(5deg);
+}
+
+.flip-r10 {
+	-ms-transform:rotate(10deg);
+	-o-transform:rotate(10deg);
+	-webkit-transform:scaleX(-1) rotate(10deg);
+	-moz-transform:rotate(10deg);
+}
 </style>
 
 <body>
