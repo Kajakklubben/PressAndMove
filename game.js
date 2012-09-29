@@ -230,7 +230,9 @@ function Player() {
 		}
 			
 		if(!isGrounded)
-			this.factor = 0.7;
+		{
+			this.factor = 0.3;
+		}
 		
 		
 			
