@@ -255,7 +255,7 @@ function Player() {
 				player.vy += -1.2;
 		}
 		
-		if(lastPressed != "right") {
+		if(lastPressed != "right" && !this.climbing) {
 			this.player.addClass("flip-horizontal");
 		}
 		else {
@@ -302,7 +302,9 @@ function Player() {
 			this.animateFrame("land", 5, true, 3);
 		}
 		else if(player.climbing) {
-			this.animateFrame("run", 1, true, 2);
+			if(upPressed || downPressed || rightPressed || leftPressed) {
+				this.animateFrame("climb", 9, true, 2);
+			}
 		}
 		else if(player.vy < 0) {
 			this.animateFrame("jump", 2, false, 2);
