@@ -131,10 +131,8 @@ document.onmousedown = function(event){
 }
 
 document.onkeypress = function(event) {
-	if(event.which == 32) {
-	}
 
-	if(event.which == 106 && event.shiftKey) {
+	if(event.which == 89 && event.shiftKey) {
 		alert(getImageForPixel(player.centerX(), player.centerY()).id + "\n" + player.centerX() + "," + player.centerY()+"\n game:" + player.x + "," + player.y);
 	}
 
