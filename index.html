@@ -15,6 +15,8 @@ Thanks to XKCD and the people who wrote the original javascript.
 <html version="-//W3C//DTD XHTML 1.1//EN" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
 	<title>Press & Move | Kajakklubben</title>
+	<link href='http://fonts.googleapis.com/css?family=Archivo+Narrow:400,700' rel='stylesheet' type='text/css'>
+	
 	<script type="text/javascript">
 
 	  var _gaq = _gaq || [];
@@ -67,6 +69,17 @@ Thanks to XKCD and the people who wrote the original javascript.
 	-webkit-transform:scaleX(-1) rotate(10deg);
 	-moz-transform:rotate(10deg);
 }
+
+a {
+	color: #333;
+}
+
+#footer {
+	font-family: 'Archivo Narrow', sans-serif;
+	text-align:center;
+	margin-top:10px;
+	color:#333;
+}
 </style>
 
 <body>
@@ -84,8 +97,8 @@ Thanks to XKCD and the people who wrote the original javascript.
 <div id="canvascontainer">
 <canvas id='canvas' width='1024' height='1024'></canvas>
 </div>
-<p>
-Homage to XKCD 1110 by Kajakklubben.
-</p>
+<div id="footer"> 
+Homage to <a href="http://xkcd.com/1110/">XKCD 1110</a> by <a href="kajakklubben.org">Kajakklubben</a>.
+</div>
 
 </html>
