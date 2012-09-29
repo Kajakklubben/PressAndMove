@@ -64,13 +64,10 @@ function cache(event, b) {
 			triggered = true;
 			break;
 		case 32:
-			if(!gameStarted) {
-				gameStarted = true;
-				player.vy = -7;
-				player.vx = 7;
-				rightPressed = true;
+			if(!gameStarted && !gameIntro) {
+				gameIntro = true;
 				window.setInterval(update,33);
-				window.setInterval(log,10000);
+				window.setInterval(log,10000);	
 				break;
 				
 			}
@@ -78,6 +75,20 @@ function cache(event, b) {
 			balloon = b;
 			triggered = true;
 			break;
+		
+	}
+	
+	if(gameIntro && !gameStarted)
+	{
+		
+		
+		downPressed = false;
+		leftPressed = false;
+		rightPressed = false;
+		upPressed = false;
+		
+		
+		
 		
 	}
 	return !triggered;
@@ -94,6 +105,7 @@ function teleport(x,y)
 }
 
 gameStarted = false;
+gameIntro = false;
 document.onkeypress = function(event) {
 	if(event.which == 32) {
 	}
@@ -344,23 +356,35 @@ var camy = 40.0;
 var lastVY;
 
 function update() {
-	player.update();
 	
+	player.update();
+		
 	updatePhysics();
-	player.animate();
+	
+	if(gameIntro)
+	{
+		player.vy = 1.2;
+		player.vx = 1.65;
+		if(isGrounded)
+			gameIntro = false;
+	}
 
-	camy += (player.y-camy)/4.0;
-	camx += (player.x-camx)/4.0;
+
+	player.animate();
+	if(!gameIntro)
+	{
+	camy += (player.y-camy)/5.0;
+	camx += (player.x-camx)/5.0;
 	
 	camy = Math.floor(camy);
 	camx = Math.floor(camx);
-	
+	}
 	oldPlayerX = player.x;
 	
 	player.x += player.vx;
 	player.y += player.vy;
 	
-	
+
 	updateMap();
 	lastVY = player.vy;
 }
@@ -378,7 +402,7 @@ function updateMap()
 	
 	offset = player.player.offsetParent().offsetParent().offset();
 	offset.left += player.player.offsetParent().offsetParent().width()/2-20;
-	offset.top +=player.player.offsetParent().offsetParent().height()/2+130;
+	offset.top +=player.player.offsetParent().offsetParent().height()/2+160;
 
 	//player.player.offset({left: 650, top: 400});
 	player.player.offset({left: offset.left+(player.x-camx), top: offset.top+(player.y-camy)});
