@@ -120,7 +120,7 @@ var Map=function($container){
 								collisionMap[nm] = context.getImageData(0, 0, 1024, 1024).data;
 							})
 							colImg.attr('src', '/collision/'+nm+'C.png')
-						}}(name), (++colissionDelayTimer)*500);
+						}}(name), (++colissionDelayTimer)*100);
 					}
 					
 					
