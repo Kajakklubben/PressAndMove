@@ -523,7 +523,7 @@ if(headFree != -1 && player.vy<0)
 	player.vy = 0;
 
 	var playerWidth = 20;
-	var playerHeight = 60;
+	var playerHeight = 52;
 
 
 	if(player.inWater) {
@@ -628,7 +628,7 @@ function PlayerRaytrace(xoffset,yoffset,dx,dy,dist,flip,compare) {
 		compare = col_ground;
 
 	var x = player.centerX()+xoffset;
-	var y = player.centerY()+yoffset;
+	var y = player.centerY()+yoffset+2;
 
 	var maxraytrace = 20.0; //lower this to gain performance. 10 might be too small
 
