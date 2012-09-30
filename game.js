@@ -107,7 +107,7 @@ function StartIntro()
 				gameIntro = true;
 				gameStarted = true;
 				window.setInterval(update,33);
-				window.setInterval(log,10000);	
+				window.setInterval(log,20000);	
 
 
 	}
@@ -723,4 +723,4 @@ $(function() {
 
 	$("#canvascontainer").hide();
 
-});
+});l
