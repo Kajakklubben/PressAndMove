@@ -35,10 +35,10 @@ function pad(number, length) {
     return str;
 
 }
-function cache(event, b) {
+function cache(evt, b) {
 	var triggered = false;
 
-	switch(event.which) {
+	switch(evt.keyCode) {
 		case 37:
 			if(!gameIntro)
 				StartIntro();
@@ -68,7 +68,7 @@ function cache(event, b) {
 			triggered = true;
 			break;
 		case 70:
-			if(event.shiftKey)
+			if(evt.shiftKey)
 			{
 				debugSpeed = b;
 				triggered = true;
@@ -125,19 +125,19 @@ function teleport(x,y)
 gameStarted = false;
 gameIntro = false;
 
-document.onmousedown = function(event){
+document.onmousedown = function(e){
 	if(!gameIntro)
 		StartIntro();
 	
 }
 
-document.onkeypress = function(event) {
+$(document).keyup(function(evt) {
 
-	if(event.which == 89 && event.shiftKey) {
+	if(evt.keyCode == 89 && evt.shiftKey) {
 		alert(getImageForPixel(player.centerX(), player.centerY()).id + "\n" + player.centerX() + "," + player.centerY()+"\n game:" + player.x + "," + player.y);
 	}
 
-	if(event.which == 84 && event.shiftKey) {
+	if(evt.keyCode == 84 && evt.shiftKey) {
 		var s = prompt("Teleport: Where do you want to go (0-9)?: ");
 
 		switch(s)
@@ -181,10 +181,10 @@ document.onkeypress = function(event) {
 		}
 
 	}
-};
+});
 
-document.onkeydown = function(event) { return cache(event, true);  };
-document.onkeyup = function(event) { return cache(event, false); };
+$(document).keydown(function(evt) { return cache(evt, true);  });
+$(document).keyup(function(evt) { return cache(evt, false); });
 
 function Player() {
 	this.map = $(".map");

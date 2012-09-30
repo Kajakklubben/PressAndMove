@@ -143,7 +143,7 @@ var Map=function($container){
 						width: 	2048,
 						height: 2048,
 						src:	$this.attr('src'),
-						id: 	$this.data('name'),
+						id: 	$this.data('name')
 					}
 			});
 		}
