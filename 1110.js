@@ -130,7 +130,6 @@ var Map=function($container){
 								collisionMap[nm] = context.getImageData(0, 0, 1024, 1024).data;
 							}).error(function () {
 								if(nm.indexOf('s') != -1) {
-									console.log(nm + " set black");
 									collisionMap[nm] = collisionMap['black'];
 								}
 							});
