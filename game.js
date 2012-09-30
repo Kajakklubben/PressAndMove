@@ -657,7 +657,6 @@ var  col_ground = 3;
 function materialAtPixel(x, y) {
 	var img = getImageForPixel(x, y);
 
-
 	if(img != undefined)  {
 
 		var localX = x - img.left;
@@ -665,6 +664,8 @@ function materialAtPixel(x, y) {
 
 		return materialAtImagePixel(img.id, localX, localY);
 	}
+	
+	
 	return col_air;
 }
 
@@ -723,4 +724,4 @@ $(function() {
 
 	$("#canvascontainer").hide();
 
-});l
+});
