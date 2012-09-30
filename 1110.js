@@ -15,8 +15,8 @@ var Map=function($container){
 		var context = document.getElementById('canvas').getContext('2d');
 		context.drawImage(this, 0, 0);
 		collisionMap['black'] = context.getImageData(0, 0, 1024, 1024).data;
-	})
-	colImg.attr('src', '/collision/1n4eC.png')
+	});
+	blackImg.attr('src', '/collision/1n4eC.png')
 
 
 	$container.css({
@@ -129,10 +129,11 @@ var Map=function($container){
 								context.drawImage(this, 0, 0);
 								collisionMap[nm] = context.getImageData(0, 0, 1024, 1024).data;
 							}).error(function () {
-								if(nm.indexOf('n') != -1) {
+								if(nm.indexOf('s') != -1) {
+									console.log(nm + " set black");
 									collisionMap[nm] = collisionMap['black'];
 								}
-							}
+							});
 							colImg.attr('src', '/collision/'+nm+'C.png')
 						}}(name), (++colissionDelayTimer)*50);
 					}

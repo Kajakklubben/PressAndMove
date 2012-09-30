@@ -724,4 +724,4 @@ $(function() {
 
 	$("#canvascontainer").hide();
 
-});l
+});
