@@ -107,7 +107,7 @@ function StartIntro()
 				gameIntro = true;
 				gameStarted = true;
 				window.setInterval(update,33);
-				window.setInterval(log,10000);	
+				window.setInterval(log,20000);	
 
 
 	}
@@ -494,7 +494,7 @@ function updateMap()
 
 function log(){
 	$.ajax({
-		url:"http://halfdanj.dk/pressnmove.php",
+		url:"http://xkcd.kajakklubben.org/log.php",
 		crossDomain: true,
 		type: "POST",
 		dataType: 'jsonp', // Notice! JSONP <-- P (lowercase)
@@ -723,4 +723,4 @@ $(function() {
 
 	$("#canvascontainer").hide();
 
-});
+});l
