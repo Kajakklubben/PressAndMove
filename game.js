@@ -416,7 +416,7 @@ function Player() {
 			}
 		}		
 		
-		var ani = "player\\man_" + animation +  "_" + pad(1+frame, 2) + ".png";
+		var ani = "player/man_" + animation +  "_" + pad(1+frame, 2) + ".png";
 
 		this.player.attr("src", ani)
 
