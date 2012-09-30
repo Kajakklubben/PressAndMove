@@ -9,6 +9,16 @@ function eventPos(e) {
 }
 
 var Map=function($container){
+	var blackImg = $(new Image());
+
+	blackImg.load(function() {
+		var context = document.getElementById('canvas').getContext('2d');
+		context.drawImage(this, 0, 0);
+		collisionMap['black'] = context.getImageData(0, 0, 1024, 1024).data;
+	})
+	colImg.attr('src', '/collision/1n4eC.png')
+
+
 	$container.css({
 		'z-index': 1,
 		overflow: 'hidden',
@@ -118,7 +128,11 @@ var Map=function($container){
 								var context = document.getElementById('canvas').getContext('2d');
 								context.drawImage(this, 0, 0);
 								collisionMap[nm] = context.getImageData(0, 0, 1024, 1024).data;
-							})
+							}).error(function () {
+								if(nm.indexOf('n') != -1) {
+									collisionMap[nm] = collisionMap['black'];
+								}
+							}
 							colImg.attr('src', '/collision/'+nm+'C.png')
 						}}(name), (++colissionDelayTimer)*50);
 					}
