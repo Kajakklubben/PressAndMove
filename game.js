@@ -134,7 +134,9 @@ document.onmousedown = function(e){
 $(document).keyup(function(evt) {
 
 	if(evt.keyCode == 89 && evt.shiftKey) {
-		alert(getImageForPixel(player.centerX(), player.centerY()).id + "\n" + player.centerX() + "," + player.centerY()+"\n game:" + player.x + "," + player.y);
+		alert(getImageForPixel(player.centerX(), player.centerY()).id +
+				"\nMap: " + Math.floor(player.centerX()) + "," + Math.floor(player.centerY())+
+				"\nStart tile: " + Math.floor(player.x) + "," + Math.floor(player.y));
 	}
 
 	if(evt.keyCode == 84 && evt.shiftKey) {
@@ -226,8 +228,8 @@ function Player() {
 		this.factor = 0.6;
 		this.maxFactor = 0.6;
 		if(debugSpeed) {
-			this.factor = 4;
-			this.maxFactor = 4;
+			this.factor = 1.25;
+			this.maxFactor = 1.25;
 		}	
 
 		if(this.balloon)
