@@ -1,5 +1,6 @@
 
 var colissionDelayTimer;
+var serverMap = new Array();
 
 function eventPos(e) {
 	if(e.type.match(/^touch/)) {
@@ -133,7 +134,14 @@ var Map=function($container){
 									collisionMap[nm] = collisionMap['black'];
 								}
 							});
-							colImg.attr('src', '/collision/'+nm+'C.png')
+							
+							if(serverMap[nm] == undefined)
+								serverMap[nm] = Math.round(Math.random());
+								
+							var url = serverMap[nm] == 1 || navigator.appName == 'Microsoft Internet Explorer' ? '/collision' : "http://server2.enovasion.dk/collision";
+							
+							colImg[0].crossOrigin = '';
+							colImg.attr('src', url +  '/'+nm+'C.png')
 						}}(name), (++colissionDelayTimer)*35);
 					}
 					
