@@ -134,7 +134,7 @@ var Map=function($container){
 								}
 							});
 							colImg.attr('src', '/collision/'+nm+'C.png')
-						}}(name), (++colissionDelayTimer)*50);
+						}}(name), (++colissionDelayTimer)*35);
 					}
 					
 					
