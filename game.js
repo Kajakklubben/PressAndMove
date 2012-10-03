@@ -103,6 +103,9 @@ function cache(evt, b) {
 
 function StartIntro()
 {
+	if(collisionMap['1n1e'] == false || collisionMap['1n1w'] == false)
+		return;
+
 	if(!gameStarted) {
 				gameIntro = true;
 				gameStarted = true;
@@ -181,7 +184,6 @@ $(document).keyup(function(evt) {
 				teleport(-650,29850); // end of the world?
 			break;
 		}
-
 	}
 });
 
@@ -450,6 +452,7 @@ function update() {
 		if(isGrounded)
 		{
 			gameIntro = false;
+			gameHasBeenStarted = true;
 		}
 	}
 

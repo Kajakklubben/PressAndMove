@@ -227,6 +227,8 @@ mapPart["9n2e"] = true;
 mapPart["9s17w"] = true;
 mapPart["9s7e"] = true;
 
+var gameHasBeenStarted = false;
+
 var loading = new Array();
 var colissionDelayTimer;
 var serverMap = new Array();
@@ -352,13 +354,16 @@ var Map=function($container){
 					if(mapPart[name] == true) {
 						
 						var src;
-						if(name == '1n1e' || 1)
+						if(name == '1n1e')
 							src = 'imgs/' + name + '.png';
 						else
 							src = 'http://imgs.xkcd.com/clickdrag/' + name + '.png';
 							
 							
-						$image=$('<img data-name="' + name + '" class="tile'+name+'" src="' + src + '" style="top:'+((centre[1]+y)*tilesize)+'px;left:'+((centre[0]+x)*tilesize)+'px; z-index: -1; position: absolute; opacity: 0.4;" style="display:none" />');
+						$image=$('<img data-name="' + name + '" class="tile'+name+'" src="' + src + '" style="top:'+((centre[1]+y)*tilesize)+'px;left:'+((centre[0]+x)*tilesize)+'px; z-index: -1; position: absolute;" style="display:none" />');
+						if(gameHasBeenStarted) {
+							$image.css("opacity", 0.7);
+						}
 
 						$image.load(function(){$(this).show()}).error(function(){$(this).remove();});
 						$map.append($image);
@@ -380,7 +385,7 @@ var Map=function($container){
 									serverMap[nm] = Math.round(Math.random());
 								
 								var isChrome = navigator.userAgent.toLowerCase().indexOf('chrome') > -1;
-								var crossDomain = serverMap[nm] == 0 && isChrome || 1;
+								var crossDomain = serverMap[nm] == 0 && isChrome;
 								
 								var url = crossDomain ? "http://server2.enovasion.dk/collision" : "/collision";
 								
