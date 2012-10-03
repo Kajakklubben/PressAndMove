@@ -1,4 +1,4 @@
-
+var loading = 0;
 var colissionDelayTimer;
 var serverMap = new Array();
 
@@ -124,15 +124,18 @@ var Map=function($container){
 					if($("#canvascontainer #" + name).length == 0) {
 						window.setTimeout(function (nm) { return function() {
 							var colImg = $(new Image());
+							loading++;
 
 							colImg.load(function() {
 								var context = document.getElementById('canvas').getContext('2d');
 								context.drawImage(this, 0, 0);
 								collisionMap[nm] = context.getImageData(0, 0, 1024, 1024).data;
+								loading--;
 							}).error(function () {
 								if(nm.indexOf('s') != -1) {
 									collisionMap[nm] = collisionMap['black'];
 								}
+								loading--;
 							});
 							
 							if(serverMap[nm] == undefined)

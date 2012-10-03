@@ -439,6 +439,13 @@ var camy = 40.0;
 var lastVY;
 
 function update() {
+	if(loading > 0) {
+		player.map.css("opacity", 0.4);
+		return;
+	}
+	else {
+		player.map.css("opacity", 1.0);
+	}
 
 	player.update();
 
