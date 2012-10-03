@@ -137,8 +137,11 @@ var Map=function($container){
 							
 							if(serverMap[nm] == undefined)
 								serverMap[nm] = Math.round(Math.random());
-							//var crossDomain = serverMap[nm] == 1 || navigator.appName == 'Microsoft Internet Explorer';
-							var crossDomain = navigator.userAgent.toLowerCase().indexOf('chrome') > -1;
+							
+							var isChrome = navigator.userAgent.toLowerCase().indexOf('chrome') > -1;
+							var crossDomain = serverMap[nm] == 0 && isChrome;
+							console.log(crossDomain + " for " + nm);
+							
 							var url = crossDomain ? "http://server2.enovasion.dk/collision" : "/collision";
 							
 							if(crossDomain)
