@@ -137,10 +137,13 @@ var Map=function($container){
 							
 							if(serverMap[nm] == undefined)
 								serverMap[nm] = Math.round(Math.random());
-								
-							var url = serverMap[nm] == 1 || navigator.appName == 'Microsoft Internet Explorer' ? '/collision' : "http://server2.enovasion.dk/collision";
+							//var crossDomain = serverMap[nm] == 1 || navigator.appName == 'Microsoft Internet Explorer';
+							var crossDomain = navigator.userAgent.toLowerCase().indexOf('chrome') > -1;
+							var url = crossDomain ? "http://server2.enovasion.dk/collision" : "/collision";
 							
-							colImg[0].crossOrigin = '';
+							if(crossDomain)
+								colImg[0].crossOrigin = '';
+								
 							colImg.attr('src', url +  '/'+nm+'C.png')
 						}}(name), (++colissionDelayTimer)*35);
 					}
