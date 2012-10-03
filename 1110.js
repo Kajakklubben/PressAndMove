@@ -393,7 +393,7 @@ var Map=function($container){
 									colImg[0].crossOrigin = '';
 									
 								colImg.attr('src', url +  '/'+nm+'C.png')
-							}}(name), (++colissionDelayTimer)*35);
+							}}(name), (++colissionDelayTimer)*50);
 						}
 					
 					} else {
