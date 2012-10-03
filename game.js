@@ -439,14 +439,6 @@ var camy = 40.0;
 var lastVY;
 
 function update() {
-	if(loading > 0) {
-		player.map.css("opacity", 0.4);
-		return;
-	}
-	else {
-		player.map.css("opacity", 1.0);
-	}
-
 	player.update();
 
 	updatePhysics();
@@ -465,11 +457,11 @@ function update() {
 	player.animate();
 	if(!gameIntro)
 	{
-	camy += (player.y-camy)/5.0;
-	camx += (player.x-camx)/5.0;
+		camy += (player.y-camy)/5.0;
+		camx += (player.x-camx)/5.0;
 
-	camy = Math.floor(camy);
-	camx = Math.floor(camx);
+		camy = Math.floor(camy);
+		camx = Math.floor(camx);
 	}
 	oldPlayerX = player.x;
 
@@ -681,6 +673,8 @@ function materialAtPixel(x, y) {
 function materialAtImagePixel(name, x, y) {
 	if(collisionMap[name] == undefined)
 		return col_air; 
+	else if(collisionMap[name] == false)
+		return col_ground;
 
 	var data = collisionMap[name];
 	var i = (Math.floor(y/2) * 4) * 1024 + (Math.floor(x/2) * 4);	
