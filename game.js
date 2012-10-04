@@ -103,8 +103,10 @@ function cache(evt, b) {
 
 function StartIntro()
 {
-	if(collisionMap['1n1e'] == false || collisionMap['1n1w'] == false)
+	if(collisionMap['1n1e'] == false || collisionMap['1n1w'] == false || collisionMap['2n1w'] == false || collisionMap['1n2e'] == false) {
+		alert("Game is still loading - try again soon :)");
 		return;
+	}
 
 	if(!gameStarted) {
 				gameIntro = true;
@@ -729,5 +731,5 @@ $(function() {
 
 
 	$("#canvascontainer").hide();
-
+	
 });

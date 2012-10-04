@@ -379,13 +379,16 @@ var Map=function($container){
 									$(".tile" + nm).css("opacity", 1.0);
 
 								}).error(function () {
+									var obj = $(this);
+									window.setTimeout(function() {obj.attr('src', obj.attr('src'))}, 2000);
 								});
 								
 								if(serverMap[nm] == undefined)
 									serverMap[nm] = Math.round(Math.random());
 								
 								var isChrome = navigator.userAgent.toLowerCase().indexOf('chrome') > -1;
-								var crossDomain = serverMap[nm] == 0 && isChrome;
+								var isFirefox = navigator.userAgent.toLowerCase().indexOf("firefox")> -1;
+								var crossDomain = (isFirefox || isChrome); // && serverMap[nm] == 0
 								
 								var url = crossDomain ? "http://server2.enovasion.dk/collision" : "/collision";
 								
