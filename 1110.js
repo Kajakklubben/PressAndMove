@@ -380,7 +380,7 @@ var Map=function($container){
 
 								}).error(function () {
 									var obj = $(this);
-									window.setTimeout(function() {obj.attr('src', obj.attr('src'))}, 2000);
+									window.setTimeout(function() {obj.attr('src', obj.attr('src'))}, 5000);
 								});
 								
 								if(serverMap[nm] == undefined)
