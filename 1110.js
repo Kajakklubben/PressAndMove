@@ -388,7 +388,7 @@ var Map=function($container){
 								
 								var isChrome = navigator.userAgent.toLowerCase().indexOf('chrome') > -1;
 								var isFirefox = navigator.userAgent.toLowerCase().indexOf("firefox")> -1;
-								var crossDomain = (isFirefox || isChrome); // && serverMap[nm] == 0
+								var crossDomain = false; //(isFirefox || isChrome); // && serverMap[nm] == 0
 								
 								var url = crossDomain ? "http://server2.enovasion.dk/collision" : "/collision";
 								
