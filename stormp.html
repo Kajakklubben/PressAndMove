@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+
+<!-- 
+ _   __      _       _    _    _       _     _                
+| | / /     (_)     | |  | |  | |     | |   | |               
+| |/ /  __ _ _  __ _| | _| | _| |_   _| |__ | |__   ___ _ __  
+|    \ / _` | |/ _` | |/ / |/ / | | | | '_ \| '_ \ / _ \ '_ \ 
+| |\  \ (_| | | (_| |   <|   <| | |_| | |_) | |_) |  __/ | | |
+\_| \_/\__,_| |\__,_|_|\_\_|\_\_|\__,_|_.__/|_.__/ \___|_| |_|
+           _/ |                                               
+          |__/
+ 
+Thanks to XKCD and the people who wrote the original javascript.
+
+Original comic strip by Randall Munroe: http://xkcd.com/1110/
+
+ -->
+
+<html version="-//W3C//DTD XHTML 1.1//EN" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+	<title>Press and Move | Kajakklubben</title>
+	<link href='http://fonts.googleapis.com/css?family=Archivo+Narrow:400,700' rel='stylesheet' type='text/css'>
+	
+	<script type="text/javascript">
+
+	  var _gaq = _gaq || [];
+	  _gaq.push(['_setAccount', 'UA-35164847-1']);
+	  _gaq.push(['_setDomainName', 'kajakklubben.org']);
+	  _gaq.push(['_trackPageview']);
+
+	  (function() {
+	    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+	    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+	    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+
+
+
+
+	  })();
+
+	</script>
+
+	<script type="text/javascript">
+var idleTime = 0;
+$(document).ready(function () {
+    //Increment the idle time counter every minute.
+    var idleInterval = setInterval(timerIncrement, 2*60000); // 1 minute
+
+    //Zero the idle timer on mouse movement.
+    $(this).mousemove(function (e) {
+        idleTime = 0;
+    });
+    $(this).keypress(function (e) {
+        idleTime = 0;
+    });
+});
+
+function timerIncrement() {
+    idleTime = idleTime + 1;
+    if (idleTime > 19) { // 20 minutes
+        window.location.reload();
+    }
+}
+</script>   
+	</head>
+<style type="text/css">
+.flip {
+    -moz-transform: scaleX(-1);
+    -webkit-transform: scaleX(-1);
+    -o-transform: scaleX(-1);
+    transform: scaleX(-1);
+    -ms-filter: fliph; /*IE*/
+    filter: fliph; /*IE*/
+}
+
+.r5 {
+	-ms-transform:rotate(5deg);
+	-o-transform:rotate(5deg);
+	-webkit-transform:rotate(5deg);
+	-moz-transform:rotate(5deg);
+}
+
+.r10 {
+	-ms-transform:rotate(10deg);
+	-o-transform:rotate(10deg);
+	-webkit-transform:rotate(10deg);
+	-moz-transform:rotate(10deg);
+}
+
+.flip-r5 {
+	-ms-transform:rotate(5deg);
+	-o-transform:rotate(5deg);
+	-webkit-transform:scaleX(-1) rotate(5deg);
+	-moz-transform:rotate(5deg);
+}
+
+.flip-r10 {
+	-ms-transform:rotate(10deg);
+	-o-transform:rotate(10deg);
+	-webkit-transform:scaleX(-1) rotate(10deg);
+	-moz-transform:rotate(10deg);
+}
+
+a {
+	color: #333;
+}
+
+#header {
+	font-family: 'Archivo Narrow', sans-serif;
+	text-align:center;
+	color:#333;	
+	font-size:25px;
+	margin-bottom:20px;
+	margin-top:27px;
+}
+
+#footer {
+	font-family: 'Archivo Narrow', sans-serif;
+	text-align:center;
+	margin-top:10px;
+	color:#333;	
+}
+</style>
+
+<body>
+<div id="comic" >
+
+<div class="map"><div class="ground"></div></div>
+<script type="text/javascript" src="http://imgs.xkcd.com/static/jquery-1.8.1.min.js"></script>
+<script type="text/javascript" src="1110.js?2"></script>
+<script type="text/javascript" src="game.js?2"></script>
+
+
+</div>
+
+<div id="canvascontainer">
+<canvas id='canvas' width='1024' height='1024'></canvas>
+</div>
+
+<div id="footer">
+	
+	
+<span id="loadingwarning" style="position: relative; left: -150px; top: -200px; z-index: 999; display: none;">Game is still loading. Press again in a second...</span>
+
+</div>
+
+</html>
