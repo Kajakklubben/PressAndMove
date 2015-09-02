@@ -502,7 +502,7 @@ function updateMap()
 }
 
 function log(){
-	$.ajax({
+	/*($.ajax({
 		url:"http://xkcd.kajakklubben.org/log.php",
 		crossDomain: true,
 		type: "POST",
@@ -512,7 +512,7 @@ function log(){
 			xpos: player.x,
 			ypos: player.y
 		}
-	});
+	});*/
 
 }
 
